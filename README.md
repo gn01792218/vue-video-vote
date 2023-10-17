@@ -1,4 +1,4 @@
-# 專案使用 Vue 3 + Typescript + Vite + TailwindCss
+# 專案使用 Vue 3 + Typescript + Vite + Pinia + TailwindCss
 
 This template should help get you started developing with Vue 3 and Typescript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
@@ -21,6 +21,10 @@ npm run build
 ### feature/readMe -->修改README.md專用
 ### feature/codeReview -->codeReview專用
 ### feature/rwd -->調整RWD專用
+
+# 狀態管理 - Pinia
+使用教學<br/>
+https://www.notion.so/pinia-pinia-0966abfd0b5b4440ae9119fe66997164
 
 # Tailwind 使用
 ## 安裝
