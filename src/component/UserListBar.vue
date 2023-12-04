@@ -1,7 +1,10 @@
 <template>
-    <ul class="border-2 w-full h-full">
-        <li class="border-2 w-full flex items-center" :class="[`h-[${100/rows}%]`]" v-for="user in userList" :key="user.id"
-        >{{ user.name }}</li>
+    <ul class="h-full even:bg-slate-400">
+        <li class=" border-b-2 border-b-slate-400 flex items-center" :class="[`h-[${100/rows}%]`]" v-for="user in userList" :key="user.id"
+        ><p class="overflow-hidden text-ellipsis whitespace-nowrap">
+            {{ user.name }}
+        </p>
+    </li>
     </ul>
 </template>
 
