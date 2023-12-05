@@ -6,11 +6,11 @@
         class="w-[100px] h-[50px] border-2 animate-bounce border-blue-500 bg-blue-800 ml-5 text-white rounded-xl"
         @click="play">抽獎</button>
     </section>
-    <section class="flex w-full h-[90%]">
+    <section class="flex w-full h-[90%] items-center bg-slate-500">
       <aside class="w-[10%] h-full">
         <LotteryList :lottery-list="lotteryList" />
       </aside>
-      <section class="bg-slate-600 w-[90%] h-full flex overflow-hidden">
+      <section id="lottery-area" class="bg-slate-600 w-[90%] h-full flex overflow-hidden">
         <UserListBar :id="`userBar-${index}`" v-for="index in userBarCols" :key="index" :rows="userBarRows"
           :user-list="userList.slice(userBarRows * index, userBarRows * index + userBarRows)"
           :style='`width: ${100 / userBarCols}%;`' />
@@ -50,21 +50,34 @@ loadLotteryList()
 
 //function
 async function play() {
-  const promiesList:Promise<Animation>[] = []
-    for (let i = 0; i < userBarCols; i++) {
-      const userBar = document.getElementById(`userBar-${i+1}`)
-      const ua = userBar?.animate([
-        {transform:`translateY(${i%2===0?'-':''}100%)`},
-        {transform:'translateY(0)',offset:0.3},
-      ],{
-        duration:1000,
-        fill:'both',
-        easing:"ease-in"
-      })
-      promiesList.push(ua!.finished)
-    }
-    await Promise.all(promiesList)
-    const myModal = new Modal(document.getElementById("lotteryModal"));
-    myModal.show()
+  const lotteryArea = document.getElementById('lottery-area')
+  lotteryArea!.style.height = '800px'
+  const promiesList: Promise<Animation>[] = []
+  for (let i = 0; i < userBarCols; i++) {
+    const userBar = document.getElementById(`userBar-${i + 1}`)
+    userBar!.style.height = '100vh'
+    // userBar!.style.position = 'absolute'
+    const ua = userBar?.animate([
+      { transform: `translateY(${i % 2 === 0 ? '-' : ''}25%)` },
+      { transform: `translateY(${i % 2 === 0 ? '' : '-'}25%)`, offset: 0.1 },
+      { transform: `translateY(${i % 2 === 0 ? '-' : ''}25%)` },
+      { transform: `translateY(${i % 2 === 0 ? '' : '-'}25%)`, offset: 0.3 },
+      { transform: `translateY(${i % 2 === 0 ? '-' : ''}25%)` },
+      { transform: `translateY(${i % 2 === 0 ? '' : '-'}25%)`, offset: 0.5 },
+      { transform: `translateY(${i % 2 === 0 ? '-' : ''}25%)` },
+      { transform: `translateY(${i % 2 === 0 ? '' : '-'}25%)`, offset: 0.7 },
+      { transform: `translateY(${i % 2 === 0 ? '-' : ''}25%)` },
+      { transform: `translateY(${i % 2 === 0 ? '' : '-'}25%)`, offset: 0.9 },
+    ], {
+      duration: 5000,
+      fill: 'forwards',
+      easing: "ease-in"
+    })
+    promiesList.push(ua!.finished)
+  }
+  await Promise.all(promiesList)
+  const myModal = new Modal(document.getElementById("lotteryModal"));
+  myModal.show()
+  lotteryArea!.style.height = '100%'
 }
 </script>
