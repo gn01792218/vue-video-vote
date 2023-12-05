@@ -1,5 +1,5 @@
 <template>
-  <main class="h-screen">
+  <main class="h-screen relative">
     <section class="h-[10%] bg-slate-500 flex justify-center items-center">
       <h1 class="text-5xl">XX公司尾牙大樂透</h1>
       <button type="button"
@@ -17,6 +17,12 @@
       </section>
     </section>
   </main>
+  <UserNewsTicker
+    class="absolute top-0"
+    :each-list-user-number="userBarRows"
+    :news-ticker-number="userBarCols"
+    :user-list="userList"
+  />
   <LotteryModal />
 </template>
 <script setup lang="ts">
@@ -26,6 +32,7 @@ import { useUserStore } from '@/store/useUserStore'
 import UserListBar from '@/component/UserListBar.vue'
 import LotteryList from "@/component/LotteryItemList.vue"
 import LotteryModal from '@/component/LotteryModal.vue';
+import UserNewsTicker from '@/component/UserNewsTicker.vue';
 import {
   Animate,
   Modal,
