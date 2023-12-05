@@ -10,7 +10,7 @@
       <aside class="w-[10%] h-full">
         <LotteryList :lottery-list="lotteryList" />
       </aside>
-      <section class="bg-slate-600 w-[90%] h-full flex">
+      <section class="bg-slate-600 w-[90%] h-full flex overflow-hidden">
         <UserListBar :id="`userBar-${index}`" v-for="index in userBarCols" :key="index" :rows="userBarRows"
           :user-list="userList.slice(userBarRows * index, userBarRows * index + userBarRows)"
           :style='`width: ${100 / userBarCols}%;`' />
@@ -29,7 +29,9 @@ import LotteryModal from '@/component/LotteryModal.vue';
 import {
   Animate,
   Modal,
+  initTE
 } from "tw-elements";
+initTE({ Animate });
 
 //Pinia
 const { lotteryList } = storeToRefs(useLotteryStore())
@@ -47,18 +49,22 @@ for (let i = 0; i <= 10; i++) {
 loadLotteryList()
 
 //function
-function play() {
-  const myModal = new Modal(document.getElementById("lotteryModal"));
-  myModal.show()
-  for (let i = 0; i < userBarCols; i++) {
-    const evenAnimationName = ''
-    const oddAnimationName = ''
-    new Animate(document.getElementById(`userBar-${i}`), {
-      animation: i % 2 === 0 ? evenAnimationName : oddAnimationName,
-      animationReset:true,
-      animationInterval:0
-    })
-  }
-
+async function play() {
+  const promiesList:Promise<Animation>[] = []
+    for (let i = 0; i < userBarCols; i++) {
+      const userBar = document.getElementById(`userBar-${i+1}`)
+      const ua = userBar?.animate([
+        {transform:`translateY(${i%2===0?'-':''}100%)`},
+        {transform:'translateY(0)',offset:0.3},
+      ],{
+        duration:1000,
+        fill:'both',
+        easing:"ease-in"
+      })
+      promiesList.push(ua!.finished)
+    }
+    await Promise.all(promiesList)
+    const myModal = new Modal(document.getElementById("lotteryModal"));
+    myModal.show()
 }
 </script>
