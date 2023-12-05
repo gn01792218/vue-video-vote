@@ -2,7 +2,7 @@
   <main class="h-screen">
     <section class="h-[10%] bg-slate-500 flex justify-center items-center">
       <h1 class="text-5xl">XX公司尾牙大樂透</h1>
-      <button type="button" class="border-2" @click="play">抽獎</button>
+      <button type="button" class="w-[100px] h-[50px] border-2 animate-bounce border-blue-500 bg-blue-800 ml-5 text-white rounded-xl" @click="play">抽獎</button>
     </section>
     <section class="flex w-full h-[90%]">
       <aside class="w-[10%] h-full">
@@ -36,8 +36,8 @@ const { userList } = storeToRefs(useUserStore())
 const { loadUserList } = useUserStore()
 
 //基本資料
-const userBarCols = 20
-const userBarRows = 10
+const userBarCols = 10
+const userBarRows = 20
 //初始化
 for (let i = 0; i <= 10; i++) {
   loadUserList()
