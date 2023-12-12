@@ -54,11 +54,11 @@
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 #newsTicker-6{
-    transform: rotate(-5deg) translateY(300px) translateX(-300px);
+    transform: rotate(-5deg) translateY(170px) translateX(-300px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 #newsTicker-7{
-    transform: rotate(-20deg) translateY(300px) translateX(-300px);
+    transform: rotate(-20deg) translateY(-500px) translateX(-300px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 #newsTicker-8{
@@ -70,6 +70,6 @@
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 #newsTicker-10{
-    transform: rotate(-80deg) translateY(300px) translateX(-300px);
+    transform: rotate(-80deg) translateY(0px) translateX(-0px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
