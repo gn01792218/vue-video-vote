@@ -1,5 +1,5 @@
 <template>
-    <ul class="bg-red-500 h-full overflow-scroll">
+    <ul class="bg-red-500 h-full flex flex-col justify-around">
         <li v-for="lotteryItem in lotteryList" :key="lotteryItem.id" class="flex" :class="[`h-[${100/lotteryList.length}%]`]">
             <div class="h-full flex">
                 <p class="mr-1">{{ lotteryItem.name }}</p>

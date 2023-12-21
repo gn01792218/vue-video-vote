@@ -23,7 +23,7 @@
           :news-ticker-number="userBarCols" :user-list="userList" />
         <LotteryModal />
         <UserListBar :id="`userBar-${index}`" v-for="index in userBarCols" :key="index" :rows="userBarRows"
-          :user-list="userList.slice(userBarRows * index, userBarRows * index + userBarRows)"
+          :user-list="sliceUserList(index-1)"
           :style='`width: ${100 / userBarCols}%;`' />
       </section>
       <KeywordInputModal />
@@ -55,7 +55,6 @@ const { lotteryList } = storeToRefs(useLotteryStore())
 const { loadLotteryList } = useLotteryStore()
 const { loading } = storeToRefs(useLoadingStore())
 const { userList } = storeToRefs(useUserStore())
-const { loadUserList } = useUserStore()
 
 //composable
 const { getImageAssets } = useUtils()
@@ -65,10 +64,6 @@ const userBarCols = 10
 const userBarRows = 20
 const showUserNewsTicker = ref(false)
 const showWinAnimation = ref(false)
-//初始化
-for (let i = 0; i <= 10; i++) {
-  loadUserList()
-}
 loadLotteryList()
 
 //function
@@ -98,6 +93,13 @@ async function play() {
 function openKeywordInputModal(){
   const myModal = new Modal(document.getElementById("keywordInputModal"));
       myModal.show()
+}
+function sliceUserList(index:number){
+  // console.log('原本的userList',userList)
+  // console.log('擷取的起始', userBarRows * index , '擷取的末端',userBarRows*index + userBarRows)
+  const list = userList.value.slice(userBarRows * index, userBarRows * index + userBarRows)
+  // console.log('新的清單',list)
+  return list
 }
 
 </script>

@@ -61,29 +61,55 @@ import { useLoadingStore } from '@/store/useLoadingStore';
 import { useUserStore } from '@/store/useUserStore';
 const { formatDate } = useUtils()
 const { setLoading, setLoadingText, resetLoadingText } = useLoadingStore()
-const { setUserShortCode } = useUserStore()
+const { pushUserList, resetUserList } = useUserStore()
 
 const keyword = ref('')
+
 async function search() {
-    const shortcodes = []
+    if (!keyword.value) return alert('請輸入關鍵字')
     //開啟Loading畫面
     setLoading(true)
-    const users = await getHashTag({ keyword: keyword.value, start: formatDate(new Date('2023-12-20 00:00:00')), end: formatDate(new Date('2023-12-21 16:00:00')) })
-    setLoadingText('進行結果比對...就快好了~')
-    keyword.value = ''
-    //搜尋結果處理
-    if (users?.status !== 200) return alert('查無結果')
-    if (users.data.edges.length === 0) return alert('查無結果')
-    const datas = users?.data.edges.map((user: any) => user.node.shortcode)
-    shortcodes.push( ...datas)
-    //請求使用者的資訊
-    const promiseArray:Promise<any>[] =[]
-    shortcodes.forEach(shortcode=>{
-        promiseArray.push(getUserInfo({shortcode}))
-    })
-    await Promise.all(promiseArray)
-    setLoading(false)
-    resetLoadingText()
-    setUserShortCode(shortcodes)
+    //各種初始化的重置
+    resetUserList()
+    //請求使用者的shortcode
+    try{
+        const users = await getHashTag({ keyword: keyword.value, start: formatDate(new Date('2023-12-20 00:00:00')), end: formatDate(new Date('2023-12-21 16:00:00')) })
+        // keyword.value = ''
+        if (users?.status !== 200 || users.data.edges.length === 0) {
+            setLoading(false)
+            return alert('查無結果')
+        }
+        //搜尋結果處理
+        setLoadingText('進行結果比對...就快好了~')
+        const datas = users?.data.edges.map((user: any) => user.node.shortcode)
+        const shortcodes = []
+        shortcodes.push(...datas)
+        //用short請求使用者的資訊
+        const promiseArray: Promise<any>[] = []
+    
+        shortcodes.forEach(shortcode => {  //一一非同步的去請求
+            promiseArray.push(getUserInfo({ shortcode }))
+        })
+        const result = await Promise.allSettled(promiseArray)
+        if (!result[0]) {
+            setLoading(false)
+            return alert('比對失敗！')
+        }
+        result.forEach((res: any) => {
+            console.log(res)
+            if(res.status === 'fulfilled'){
+                pushUserList({
+                    id: new Date().toDateString(),
+                    name: res?.value.data.owner.username
+                })
+            }
+        })
+        //最終的各種reset
+        setLoading(false)
+        resetLoadingText()
+    }catch(err){
+        alert('請求超時!!')
+        setLoading(false)
+    }
 }
 </script>

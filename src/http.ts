@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, InternalAxiosRequestConfig,AxiosInstance, AxiosRequestConfig, AxiosHeaders } from 'axios';
+import axios, { AxiosResponse, InternalAxiosRequestConfig,AxiosInstance, AxiosRequestConfig, AxiosHeaders, AxiosError } from 'axios';
 
 //全局的header
 let header = localStorage.getItem('Authorization') ? JSON.parse(localStorage.getItem('Authorization')!) : ''
@@ -24,10 +24,10 @@ service.interceptors.response.use(
   (response: AxiosResponse) => {
     return response;
   },
-  (err: any) => {
+  (err: AxiosError) => {
     let errMsg = '';
-    if (err && err.response.status) {
-      switch (err.response.status) {
+    if (err) {
+      switch (err.response?.status) {
         case 403:
           errMsg = '拒絕訪問';
           break;
@@ -44,14 +44,14 @@ service.interceptors.response.use(
           errMsg = '服務不可用';
           break;
         default:
-          errMsg = err.response.data.msg;
-          break;
+          errMsg = err.message
       }
     } else {
       errMsg = err;
     }
-    console.log(errMsg)
-    // Message.error(errMsg);
+    if (axios.isCancel(err)) {
+      console.log('請求被取消：', err.message);
+    }
     return Promise.reject(errMsg);
   }
 );
