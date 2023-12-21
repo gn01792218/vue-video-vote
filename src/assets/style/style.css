@@ -8,11 +8,11 @@
 }
 
 .newsTickerAnimate{
-    animation: newsTicker 40s linear infinite;
+    animation: newsTicker 30s linear infinite;
 }
 .newsTickerAnimate2{
-    animation: newsTicker2 40s linear infinite;
-    animation-delay: -20s;
+    animation: newsTicker2 30s linear infinite;
+    animation-delay: -15s;
 }
 
 @keyframes newsTicker {
@@ -32,44 +32,36 @@
     }
 }
 
-
+.newsTicker .list{
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
 #newsTicker-1{
     transform: rotate(30deg) translateY(200px) translateX(-200px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 #newsTicker-2{
     transform: rotate(-30deg) translateY(200px) translateX(-200px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 #newsTicker-3{
     transform: rotate(25deg) translateY(200px) translateX(-200px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 #newsTicker-4{
     transform: rotate(-25deg) translateY(200px) translateX(-200px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 #newsTicker-5{
     transform: rotate(5deg) translateY(100px) translateX(-100px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 #newsTicker-6{
     transform: rotate(-5deg) translateY(170px) translateX(-300px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 #newsTicker-7{
     transform: rotate(-20deg) translateY(-500px) translateX(-300px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 #newsTicker-8{
     transform: rotate(-50deg) translateY(300px) translateX(-300px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 #newsTicker-9{
     transform: rotate(50deg) translateY(300px) translateX(-300px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 #newsTicker-10{
     transform: rotate(-80deg) translateY(0px) translateX(-0px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }

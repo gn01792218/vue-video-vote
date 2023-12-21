@@ -7,7 +7,9 @@
         @click="openKeywordInputModal">
         關鍵字搜尋
       </button>
-      <button type="button"
+      <button 
+      v-show="userList.length"
+      type="button"
         class="w-[100px] h-[50px] border-2 animate-bounce border-blue-500 bg-blue-800 ml-5 text-white rounded-xl"
         @click="play">抽獎</button>
     </section>
