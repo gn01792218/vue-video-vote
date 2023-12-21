@@ -3,13 +3,29 @@ import { defineStore } from 'pinia';
 export const useLoadingStore = defineStore('loadingStore', () => {
   // 初始状态
   const initState = {
-    loading: false
+    loading: false,
+    loadingText:'努力搜尋中...',
   };
   //states ( ref )
-  const loading = ref<boolean>(initState.loading);
+  const loading = ref<boolean>(initState.loading)
+  const loadingText = ref(initState.loadingText)
   //actions
   function setLoading(payload:boolean) {
     loading.value = payload
   }
-  return { loading, setLoading };
+  function setLoadingText(payload:string){
+    loadingText.value = payload
+  }
+  function resetLoadingText(){
+    loadingText.value = initState.loadingText
+  }
+  return { 
+    //data
+    loading, 
+    loadingText,
+    //function
+    setLoading, 
+    setLoadingText, 
+    resetLoadingText 
+  };
 });

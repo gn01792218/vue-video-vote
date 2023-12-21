@@ -12,3 +12,6 @@ export interface GetHashTags{
     start:string,
     end:string
 }
+export interface GetUserInfo{
+    shortcode:string,
+}

@@ -55,32 +55,35 @@
     </div>
 </template>
 <script setup lang="ts">
-import { getHashTag } from '@/api'
+import { getHashTag, getUserInfo } from '@/api'
 import useUtils from '@/composables/useUtils'
 import { useLoadingStore } from '@/store/useLoadingStore';
 import { useUserStore } from '@/store/useUserStore';
 const { formatDate } = useUtils()
-const { setLoading } = useLoadingStore()
+const { setLoading, setLoadingText, resetLoadingText } = useLoadingStore()
 const { setUserShortCode } = useUserStore()
 
 const keyword = ref('')
-
-
 async function search() {
     const shortcodes = []
     //開啟Loading畫面
     setLoading(true)
-    const users = await getHashTag({ keyword: keyword.value, start: formatDate(new Date('2023-12-20 00:00:00')), end: formatDate(new Date('2023-12-21 16:00:00')) }).finally(() => {
-        setLoading(false)
-    })
-    console.log(users)
+    const users = await getHashTag({ keyword: keyword.value, start: formatDate(new Date('2023-12-20 00:00:00')), end: formatDate(new Date('2023-12-21 16:00:00')) })
+    setLoadingText('進行結果比對...就快好了~')
     keyword.value = ''
     //搜尋結果處理
     if (users?.status !== 200) return alert('查無結果')
     if (users.data.edges.length === 0) return alert('查無結果')
     const datas = users?.data.edges.map((user: any) => user.node.shortcode)
     shortcodes.push( ...datas)
-    console.log(shortcodes)
+    //請求使用者的資訊
+    const promiseArray:Promise<any>[] =[]
+    shortcodes.forEach(shortcode=>{
+        promiseArray.push(getUserInfo({shortcode}))
+    })
+    await Promise.all(promiseArray)
+    setLoading(false)
+    resetLoadingText()
     setUserShortCode(shortcodes)
 }
 </script>
