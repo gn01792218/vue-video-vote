@@ -3,6 +3,11 @@
     <section class="h-[10%] bg-slate-500 flex justify-center items-center">
       <h1 class="text-5xl text-white">XX公司尾牙大樂透</h1>
       <button type="button"
+        class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" 
+        @click="openKeywordInputModal">
+        關鍵字搜尋
+      </button>
+      <button type="button"
         class="w-[100px] h-[50px] border-2 animate-bounce border-blue-500 bg-blue-800 ml-5 text-white rounded-xl"
         @click="play">抽獎</button>
     </section>
@@ -21,6 +26,7 @@
           :user-list="userList.slice(userBarRows * index, userBarRows * index + userBarRows)"
           :style='`width: ${100 / userBarCols}%;`' />
       </section>
+      <KeywordInputModal />
     </section>
   </main>
 </template>
@@ -33,12 +39,14 @@ import UserListBar from '@/component/UserListBar.vue'
 import LotteryList from "@/component/LotteryItemList.vue"
 import LotteryModal from '@/component/LotteryModal.vue';
 import UserNewsTicker from '@/component/UserNewsTicker.vue';
+import KeywordInputModal from '@/component/KeywordInput.vue'
 import {
+  Ripple,
   Animate,
   Modal,
   initTE
 } from "tw-elements";
-initTE({ Animate });
+initTE({ Modal, Ripple, Animate });
 
 //Pinia
 const { lotteryList } = storeToRefs(useLotteryStore())
@@ -63,13 +71,13 @@ loadLotteryList()
 //function
 async function play() {
   showUserNewsTicker.value = true
-   await new Promise<boolean>((res,rej)=>{ //彩帶開噴
+  await new Promise<boolean>((res, rej) => { //彩帶開噴
     setTimeout(() => {
       showWinAnimation.value = true
       res(true)
     }, 2000)
   })
-  await new Promise<boolean>((res,rej)=>{ //彈出中獎視窗
+  await new Promise<boolean>((res, rej) => { //彈出中獎視窗
     setTimeout(() => {
       const myModal = new Modal(document.getElementById("lotteryModal"));
       myModal.show()
@@ -77,11 +85,16 @@ async function play() {
       res(true)
     }, 1000)
   })
-   await new Promise<boolean>((res,rej)=>{  //關閉彩帶
+  await new Promise<boolean>((res, rej) => {  //關閉彩帶
     setTimeout(() => {
       showWinAnimation.value = false
       res(true)
     }, 5000)
   })
 }
+function openKeywordInputModal(){
+  const myModal = new Modal(document.getElementById("keywordInputModal"));
+      myModal.show()
+}
+
 </script>

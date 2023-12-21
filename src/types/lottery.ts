@@ -7,3 +7,8 @@ export declare interface LotteryItem{ //獎項物件
     name:string,
     owners:LotteryOwner[]  //得獎者
 }
+export interface GetHashTags{
+    keyword:string,
+    start:string,
+    end:string
+}
