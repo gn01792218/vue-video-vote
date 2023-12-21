@@ -5,10 +5,11 @@ export const useUserStore = defineStore("userStore", () => {
   // 初始状态
   const initState = {
     userList: [],
+    userShortCodes:[],
   };
   //states ( ref )
   const userList = ref<User[]>(initState.userList);
-
+  const userShortCodes = ref<string[]>(initState.userShortCodes)
   //getters
 
   //actions
@@ -37,11 +38,14 @@ export const useUserStore = defineStore("userStore", () => {
     ];
     userList.value.push(...list);
   }
-
+  function setUserShortCode(shortCodes:string[]){
+    userShortCodes.value = shortCodes
+  }
   return {
     //data
     userList,
     //function
     loadUserList,
+    setUserShortCode
   };
 });

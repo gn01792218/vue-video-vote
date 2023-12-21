@@ -27,7 +27,7 @@
                 <!--Modal body-->
                 <div class="relative p-4">
                     <div class="relative mb-3" data-te-input-wrapper-init>
-                        <input type="text"
+                        <input type="text" v-model="keyword"
                             class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                             id="exampleFormControlInput1" placeholder="Example label" />
                         <label for="exampleFormControlInput1"
@@ -46,9 +46,7 @@
                     </button>
                     <button type="button"
                         class="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-                        data-te-modal-dismiss
-                        @click="search"
-                        >
+                        data-te-modal-dismiss @click="search">
                         確認
                     </button>
                 </div>
@@ -59,12 +57,30 @@
 <script setup lang="ts">
 import { getHashTag } from '@/api'
 import useUtils from '@/composables/useUtils'
+import { useLoadingStore } from '@/store/useLoadingStore';
+import { useUserStore } from '@/store/useUserStore';
 const { formatDate } = useUtils()
+const { setLoading } = useLoadingStore()
+const { setUserShortCode } = useUserStore()
 
-async function search(){
-    const users = await getHashTag({ keyword: 'nba', start: formatDate(new Date('2023-12-20 00:00:00')), end: formatDate(new Date('2023-12-21 16:00:00')) })
-    console.log(users?.data.edges)
-    const shortcodes = users?.data.edges.map((user:any)=>user.shortcode)
+const keyword = ref('')
+
+
+async function search() {
+    const shortcodes = []
+    //開啟Loading畫面
+    setLoading(true)
+    const users = await getHashTag({ keyword: keyword.value, start: formatDate(new Date('2023-12-20 00:00:00')), end: formatDate(new Date('2023-12-21 16:00:00')) }).finally(() => {
+        setLoading(false)
+    })
+    console.log(users)
+    keyword.value = ''
+    //搜尋結果處理
+    if (users?.status !== 200) return alert('查無結果')
+    if (users.data.edges.length === 0) return alert('查無結果')
+    const datas = users?.data.edges.map((user: any) => user.node.shortcode)
+    shortcodes.push( ...datas)
     console.log(shortcodes)
+    setUserShortCode(shortcodes)
 }
 </script>

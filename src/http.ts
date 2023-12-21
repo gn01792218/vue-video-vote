@@ -1,5 +1,4 @@
 import axios, { AxiosResponse, InternalAxiosRequestConfig,AxiosInstance, AxiosRequestConfig, AxiosHeaders } from 'axios';
-import { json } from 'stream/consumers';
 
 //全局的header
 let header = localStorage.getItem('Authorization') ? JSON.parse(localStorage.getItem('Authorization')!) : ''
@@ -70,7 +69,7 @@ export default async (method:string ,url:string ,data?:any , config?:AxiosReques
 
     if(!header) header = await getAuthorizationHeader()
     else header = JSON.parse(localStorage.getItem('Authorization')!)
-
+  
     switch(method){
         case 'get':
           return service.get(url,{params:data, headers:header?.headers})

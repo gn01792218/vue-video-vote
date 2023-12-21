@@ -29,6 +29,7 @@
       <KeywordInputModal />
     </section>
   </main>
+  <LoadingBackDrop v-show="loading" class="absolute w-screen h-screen top-0"/>
 </template>
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
@@ -40,17 +41,19 @@ import LotteryList from "@/component/LotteryItemList.vue"
 import LotteryModal from '@/component/LotteryModal.vue';
 import UserNewsTicker from '@/component/UserNewsTicker.vue';
 import KeywordInputModal from '@/component/KeywordInput.vue'
+import LoadingBackDrop from "@/component/LoadingBackDrop.vue"
 import {
-  Ripple,
   Animate,
   Modal,
   initTE
 } from "tw-elements";
-initTE({ Modal, Ripple, Animate });
+import { useLoadingStore } from '@/store/useLoadingStore';
+initTE({ Animate });
 
 //Pinia
 const { lotteryList } = storeToRefs(useLotteryStore())
 const { loadLotteryList } = useLotteryStore()
+const { loading } = storeToRefs(useLoadingStore())
 const { userList } = storeToRefs(useUserStore())
 const { loadUserList } = useUserStore()
 
