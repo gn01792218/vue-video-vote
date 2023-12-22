@@ -89,8 +89,8 @@ async function fetchUserShortCodeAndGetUserName(cursor?: string): Promise<any> {
         console.log('執行了第幾次', requestCount)
         const users = await getHashTag({
             keyword: keyword.value,
-            start: formatDate(new Date('2023-12-22 12:00:00')),
-            end: formatDate(new Date('2023-12-22 18:30:00')),
+            start: formatDate(new Date('2023-12-22 17:00:00')),
+            end: formatDate(new Date('2023-12-22 21:00:00')),
             cursor
         })
 
