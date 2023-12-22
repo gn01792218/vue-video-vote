@@ -4,7 +4,33 @@ import { LotteryItem } from "../types/lottery";
 export const useLotteryStore = defineStore("lotteryStore", () => {
   // 初始状态
   const initState = {
-    lotteryList: [],
+    lotteryList: [
+      { 
+        id:'001',
+        name: "一獎",
+        owners: [],
+      },
+      {
+        id:'002',
+        name: "二獎",
+        owners: [],
+      },
+      // {
+      //   id:'003',
+      //   name: "三獎",
+      //   owners: [],
+      // },
+      // {
+      //   id:'004',
+      //   name: "四獎",
+      //   owners: [],
+      // },
+      // {
+      //   id:'005',
+      //   name: "五獎",
+      //   owners: [],
+      // },
+    ],
   };
   //states ( ref )
   const lotteryList = ref<LotteryItem[]>(initState.lotteryList);
@@ -14,37 +40,31 @@ export const useLotteryStore = defineStore("lotteryStore", () => {
   //actions
   function loadLotteryList() {
     lotteryList.value.push(
-      { 
-        id:'001',
-        name: "A賞",
-        owners: [],
-      },
-      {
-        id:'002',
-        name: "B賞",
-        owners: [{id:'14642',name:'sdfsdfsdf'},{id:'7789',name:'gn01792218'}],
-      },
-      {
-        id:'003',
-        name: "C賞",
-        owners: [{id:'7789',name:'gn01792218'}],
-      },
-      {
-        id:'004',
-        name: "D賞",
-        owners: [],
-      },
-      {
-        id:'005',
-        name: "D1賞",
-        owners: [ {id:'79',name:'方大同'},
-          {id:'78519',name:'Petter Wang'},
-          {id:'889',name:'芸芸眾生何處去'},
-          {id:'189',name:'飄飄無所從'},
-          {id:'98589',name:'網美王'},
-          {id:'4589',name:'JZsot'}
-        ],
-      },
+      // { 
+      //   id:'001',
+      //   name: "一獎",
+      //   owners: [],
+      // },
+      // {
+      //   id:'002',
+      //   name: "二獎",
+      //   owners: [],
+      // },
+      // {
+      //   id:'003',
+      //   name: "三獎",
+      //   owners: [],
+      // },
+      // {
+      //   id:'004',
+      //   name: "四獎",
+      //   owners: [],
+      // },
+      // {
+      //   id:'005',
+      //   name: "五獎",
+      //   owners: [],
+      // },
       // {
       //   id:'006',
       //   name: "E賞",

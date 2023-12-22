@@ -15,3 +15,8 @@ export interface GetHashTags{
 export interface GetUserInfo{
     shortcode:string,
 }
+export interface PostLotteryReport{
+    ownerName:string,
+    lotteryName:string,
+    date:Date
+}

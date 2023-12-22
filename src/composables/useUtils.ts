@@ -12,8 +12,12 @@ export default function useUtils() {
 
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
+  function randomInRange(min:number, max:number){
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+  }
   return {
     getImageAssets,
-    formatDate
+    formatDate,
+    randomInRange
   };
 }

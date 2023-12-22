@@ -26,8 +26,8 @@
 
                 <!--Modal body-->
                 <div class="relative p-4">
-                    <p>恭喜會員: 王大簡</p>
-                    <p>抽中頭獎</p>
+                    <p>恭喜會員: {{ lotterOwner }}</p>
+                    <p>抽中 : {{ lotteryName }}</p>
                 </div>
 
                 <!--Modal footer-->
@@ -49,3 +49,10 @@
         </div>
     </div>
 </template>
+<script setup lang="ts">
+defineProps<{
+    lotterOwner:string,
+    lotteryName:string
+}>()
+
+</script>

@@ -30,7 +30,6 @@ const props = defineProps<{
     userList:User[]
 }>()
 function sliceUser(index:number){
-    console.log('擷取自',props.eachListUserNumber * index,'到',props.eachListUserNumber*(index) + props.eachListUserNumber)
     return props.userList.slice(props.eachListUserNumber * index , props.eachListUserNumber*(index) + props.eachListUserNumber) 
 }
 

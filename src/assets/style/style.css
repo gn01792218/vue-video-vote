@@ -36,7 +36,7 @@
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 #newsTicker-1{
-    transform: rotate(30deg) translateY(200px) translateX(-200px);
+    transform: rotate(30deg) translateY(200px) translateX(500px);
 }
 #newsTicker-2{
     transform: rotate(-30deg) translateY(200px) translateX(-200px);
