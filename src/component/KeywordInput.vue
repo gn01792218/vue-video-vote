@@ -34,6 +34,22 @@
                             class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">輸入關鍵字
                         </label>
                     </div>
+                    <!-- <div class="relative mb-3" data-te-date-timepicker-init data-te-input-wrapper-init
+                        data-te-inline="true">
+                        <input 
+                        v-model="startDate"
+                        type="date"
+                            class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                            id="form2" />
+                    </div>
+                     <div class="relative mb-3" data-te-date-timepicker-init data-te-input-wrapper-init
+                        data-te-inline="true">
+                        <input 
+                        v-model="endDate"
+                        type="date"
+                            class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                            id="form2" />
+                    </div> -->
                 </div>
 
                 <!--Modal footer-->
@@ -59,11 +75,17 @@ import { getHashTag, getUserInfo } from '@/api'
 import useUtils from '@/composables/useUtils'
 import { useLoadingStore } from '@/store/useLoadingStore';
 import { useUserStore } from '@/store/useUserStore';
+
 const { formatDate } = useUtils()
 const { setLoading, setLoadingText, resetLoadingText } = useLoadingStore()
 const { pushUserList, resetUserList } = useUserStore()
 
+
+
 const keyword = ref('')
+const startDate = ref(new Date())
+const endDate = ref(new Date())
+
 let requestCount = 0
 let maxRequest = 10
 let hasNextPage = false
@@ -75,6 +97,8 @@ async function search() {
     resetUserList()
     //請求使用者的shortcode，並獲取userList
     fetchUserShortCodeAndGetUserName()
+    // console.log(startDate.value)
+    // console.log(endDate.value)
 }
 async function fetchUserShortCodeAndGetUserName(cursor?: string): Promise<any> {  //會去爬shortCode
     if (requestCount >= maxRequest) { //最後一次請求，關閉loading
@@ -95,7 +119,7 @@ async function fetchUserShortCodeAndGetUserName(cursor?: string): Promise<any> {
         })
 
         if (users?.status !== 200) return
-        if(users.data.edges.length === 0) return resetFetchData()
+        if (users.data.edges.length === 0) return resetFetchData()
         //若有下一頁，則繼續call下一頁
         if (users.data.has_next_page) {
             console.log('有下一頁', '當前頁', requestCount)

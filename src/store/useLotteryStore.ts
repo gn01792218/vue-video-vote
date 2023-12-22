@@ -15,21 +15,21 @@ export const useLotteryStore = defineStore("lotteryStore", () => {
         name: "二獎",
         owners: [],
       },
-      // {
-      //   id:'003',
-      //   name: "三獎",
-      //   owners: [],
-      // },
-      // {
-      //   id:'004',
-      //   name: "四獎",
-      //   owners: [],
-      // },
-      // {
-      //   id:'005',
-      //   name: "五獎",
-      //   owners: [],
-      // },
+      {
+        id:'003',
+        name: "三獎",
+        owners: [],
+      },
+      {
+        id:'004',
+        name: "四獎",
+        owners: [],
+      },
+      {
+        id:'005',
+        name: "五獎",
+        owners: [],
+      },
     ],
   };
   //states ( ref )
