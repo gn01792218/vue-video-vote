@@ -14,7 +14,6 @@ export const useCounterStoreForSetup = defineStore('counterForSetup', () => {
   //actions
   function increment() {
     count.value++;
-    console.log('pinia',count.value)
   }
 
   function reset() {

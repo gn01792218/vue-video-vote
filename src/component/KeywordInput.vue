@@ -64,52 +64,84 @@ const { setLoading, setLoadingText, resetLoadingText } = useLoadingStore()
 const { pushUserList, resetUserList } = useUserStore()
 
 const keyword = ref('')
-
+let requestCount = 0
+let maxRequest = 10
+let hasNextPage = false
 async function search() {
     if (!keyword.value) return alert('請輸入關鍵字')
     //開啟Loading畫面
     setLoading(true)
     //各種初始化的重置
     resetUserList()
-    //請求使用者的shortcode
-    try{
-        const users = await getHashTag({ keyword: keyword.value, start: formatDate(new Date('2023-12-20 00:00:00')), end: formatDate(new Date('2023-12-21 16:00:00')) })
-        // keyword.value = ''
-        if (users?.status !== 200 || users.data.edges.length === 0) {
-            setLoading(false)
-            return alert('查無結果')
+    //請求使用者的shortcode，並獲取userList
+    fetchUserShortCodeAndGetUserName()
+}
+async function fetchUserShortCodeAndGetUserName(cursor?: string): Promise<any> {  //會去爬shortCode
+    if (requestCount >= maxRequest) { //最後一次請求，關閉loading
+        resetFetchData();
+        return
+    }
+    else if (requestCount === maxRequest) setLoadingText('求取最後一批資料!')
+    else setLoadingText('請求資料...')
+
+    try {
+        requestCount++  //美執行一次就算一次
+        console.log('執行了第幾次', requestCount)
+        const users = await getHashTag({
+            keyword: keyword.value,
+            start: formatDate(new Date('2023-12-22 12:00:00')),
+            end: formatDate(new Date('2023-12-22 18:30:00')),
+            cursor
+        })
+
+        if (users?.status !== 200) return
+        //若有下一頁，則繼續call下一頁
+        if (users.data.has_next_page) {
+            console.log('有下一頁', '當前頁', requestCount)
+            fetchUserShortCodeAndGetUserName(users.data.cursor)
+            hasNextPage = true
+        } else {
+            console.log('沒有下一頁')
+            hasNextPage = false
         }
-        //搜尋結果處理
-        setLoadingText('進行結果比對...就快好了~')
+
+        //若有搜尋結果處理
+        if (requestCount === maxRequest) setLoadingText('最後一次比對...就快好啦~~~~~~')
+        else setLoadingText('進行資料比對...請耐心等候')
+
         const datas = users?.data.edges.map((user: any) => user.node.shortcode)
         const shortcodes = []
         shortcodes.push(...datas)
         //用short請求使用者的資訊
         const promiseArray: Promise<any>[] = []
-    
+
         shortcodes.forEach(shortcode => {  //一一非同步的去請求
             promiseArray.push(getUserInfo({ shortcode }))
         })
         const result = await Promise.allSettled(promiseArray)
-        if (!result[0]) {
-            setLoading(false)
-            return alert('比對失敗！')
+        if (!hasNextPage) {
+            console.log('沒下一頁了，關閉')
+            return resetFetchData()
         }
         result.forEach((res: any) => {
-            console.log(res)
-            if(res.status === 'fulfilled'){
+            if (res.status === 'fulfilled') {
                 pushUserList({
                     id: new Date().toDateString(),
                     name: res?.value.data.owner.username
                 })
             }
         })
-        //最終的各種reset
-        setLoading(false)
-        resetLoadingText()
-    }catch(err){
-        alert('請求超時!!')
-        setLoading(false)
+    } catch (err) {
+        console.log('第', requestCount, '次請求，超時，自動繼續執行')
+        if (requestCount === 1) return fetchUserShortCodeAndGetUserName()
+        fetchUserShortCodeAndGetUserName(cursor)  //請求時如果失敗，自動再請求一次~
     }
+}
+
+function resetFetchData() {
+    setLoading(false);
+    resetLoadingText();
+    console.log('結束返回', requestCount);
+    requestCount = 0;
 }
 </script>

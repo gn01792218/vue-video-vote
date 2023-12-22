@@ -12,6 +12,7 @@ export const useUserStore = defineStore("userStore", () => {
 
   //actions
   function pushUserList(payload: User) {
+    if(userList.value.find(user=>user.name === payload.name)) return
     userList.value.push(payload)
   }
   function resetUserList() {
