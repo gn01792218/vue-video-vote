@@ -85,7 +85,7 @@ async function fetchUserShortCodeAndGetUserName(cursor?: string): Promise<any> {
     else setLoadingText('請求資料...')
 
     try {
-        requestCount++  //美執行一次就算一次
+        requestCount++  //每執行一次就算一次
         console.log('執行了第幾次', requestCount)
         const users = await getHashTag({
             keyword: keyword.value,
@@ -95,6 +95,7 @@ async function fetchUserShortCodeAndGetUserName(cursor?: string): Promise<any> {
         })
 
         if (users?.status !== 200) return
+        if(users.data.edges.length === 0) return resetFetchData()
         //若有下一頁，則繼續call下一頁
         if (users.data.has_next_page) {
             console.log('有下一頁', '當前頁', requestCount)
@@ -119,10 +120,6 @@ async function fetchUserShortCodeAndGetUserName(cursor?: string): Promise<any> {
             promiseArray.push(getUserInfo({ shortcode }))
         })
         const result = await Promise.allSettled(promiseArray)
-        if (!hasNextPage) {
-            console.log('沒下一頁了，關閉')
-            return resetFetchData()
-        }
         result.forEach((res: any) => {
             if (res.status === 'fulfilled') {
                 pushUserList({
@@ -131,6 +128,10 @@ async function fetchUserShortCodeAndGetUserName(cursor?: string): Promise<any> {
                 })
             }
         })
+        if (!hasNextPage) {
+            console.log('沒下一頁了，關閉')
+            return resetFetchData()
+        }
     } catch (err) {
         console.log('第', requestCount, '次請求，超時，自動繼續執行')
         if (requestCount === 1) return fetchUserShortCodeAndGetUserName()
