@@ -2,10 +2,10 @@ import { createRouter, createWebHistory, RouteRecordRaw ,createWebHashHistory} f
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
-    name: 'Home',
-    component:()=>import('@/views/Home.vue')
-  }
+    path: '/display',
+    name: 'Display',
+    component:()=>import('@/views/Display.vue')
+  },
 ]
 
 const router = createRouter({

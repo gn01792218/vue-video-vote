@@ -3,18 +3,12 @@ import axios, {
   InternalAxiosRequestConfig,
   AxiosInstance,
   AxiosRequestConfig,
-  AxiosHeaders,
   AxiosError,
 } from "axios";
 
-//全局的header
-let header = localStorage.getItem("Authorization")
-  ? JSON.parse(localStorage.getItem("Authorization")!)
-  : "";
-
 // axios實例
 const service: AxiosInstance = axios.create({
-  baseURL: "https://api.gamenow.online/",
+  baseURL: "https://api.gamenow.online/api/",
   headers: { "Content-Type": "application/json" },
   timeout: 30000, // 超时时间
 });
@@ -64,17 +58,6 @@ service.interceptors.response.use(
     return Promise.reject(errMsg);
   }
 );
-async function getAuthorizationHeader() {
-  //  填入自己 ID、KEY 開始
-  let invitation_code = "01HJ5326MHBMYJ8RQQPKPAQ38G";
-  const token = await service.post("https://api.gamenow.online/token", {
-    invitation_code,
-  });
-  let Authorization = `Authorization: Bearer ${token.data.token}`;
-  const storageData = { headers: { Authorization: Authorization } };
-  localStorage.setItem("Authorization", JSON.stringify(storageData)); //存於localstorage
-  return storageData;
-}
 export default async (
   method: string,
   url: string,
@@ -83,13 +66,10 @@ export default async (
 ) => {
   method = method.toLowerCase();
 
-  if (!header) header = await getAuthorizationHeader();
-  else header = JSON.parse(localStorage.getItem("Authorization")!);
-
   switch (method) {
     case "get":
-      return service.get(url, { params: data, headers: header?.headers });
+      return service.get(url, { params: data });
     case "post":
-      return service.post(url, data, header);
+      return service.post(url, data);
   }
 };
