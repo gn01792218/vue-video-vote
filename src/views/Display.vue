@@ -57,7 +57,6 @@ watch(currentTime,()=>{
 async function init(){
     const video = await getVideoByIndex(videoControler.value.current_video_index)
     const videoControl = await getVIdeoControl()
-    // intavlVideoAndControl()
     registerVideoTimeUpdate()
     videoControler.value = videoControl
     currentVideo.value = video
