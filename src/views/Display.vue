@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentVideo, getVIdeoControl, postVIdeoControl } from '../api'
+import { getCurrentVideo, getVIdeoControl, postVIdeoControl, getVideoByIndex } from '../api'
 import { VideoStatus, type Video, type VideoControler } from '../types/video';
 const videoElement = ref<HTMLVideoElement | null>(null)
 const currentVideo = ref<Video| null>(null)
@@ -54,11 +54,10 @@ watch(currentTime,()=>{
     if( videoControler.value.video_status === VideoStatus.BRANCHVIDEOCOMPLETE ) onBranchVideoComplete()
 })
 async function init(){
-    const video = await getCurrentVideo()
+    const video = await getVideoByIndex(videoControler.value.current_video_index)
     const videoControl = await getVIdeoControl()
     intavlVideoAndControl()
     registerVideoTimeUpdate()
-    // const video = videos[0] //暫時的
     videoControler.value = videoControl
     currentVideo.value = video
     playVideo()
@@ -80,6 +79,7 @@ function setStatus(){ //修改狀態以及通知server
     }
     if( videoProgress.value === 100 && isBranchVideo.value ) {
         videoControler.value.video_status = VideoStatus.BRANCHVIDEOCOMPLETE
+        videoControler.value.current_video_index+=1 //播下一部
         postVIdeoControl({
             current_video_index:videoControler.value.current_video_index,
             video_status:VideoStatus.BRANCHVIDEOCOMPLETE
@@ -109,7 +109,8 @@ function onVideoVoteComplete(){
 }
 async function onBranchVideoComplete(){
     //進入下一關
-    const video = await getCurrentVideo()
+    console.log('準備進入下一關，currentIndex改成', videoControler.value.current_video_index)
+    const video = await getVideoByIndex(videoControler.value.current_video_index)
     const control = await getVIdeoControl()
     currentVideo.value = video //更新下一關的video
     videoControler.value = control  //更新controler的狀態

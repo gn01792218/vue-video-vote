@@ -1,7 +1,7 @@
 <template>
     <section class="w-[88%] h-screen relative mx-auto text-center flex flex-col items-center justify-center">
         <p class="text-gary-500">當前關卡{{ videoController.current_video_index + 1 }}</p>
-        <div v-if="showButton" class="max-w-[400px]">
+        <div v-if="showButton && videoController.video_status === VideoStatus.VOTING" class="max-w-[400px]">
             <p class="text-red-500 mb-5">你會怎麼決定呢?!!!</p>
             <p class="text-3xl text-red-500 mb-5">請選擇!</p>
             <button class="border-2 w-[150px] h-[150px] bg-green-500 mb-5" @click="vote(VideoSide.A)">A</button>
@@ -39,7 +39,6 @@ watch(currentIndex,()=>{
     hasVoted.value = false
 })
 watch(videoController,()=>{
-//    if(videoController.value.video_status === VideoStatus.VOTING) showButton.value = true 
    onStatusChange()
 })
 function init() {
@@ -60,17 +59,20 @@ function vote(side: VideoSide) {
 function intervalData(){
   setInterval(()=>{
     getCurrentVideo().then(res => currentVideo.value = res)
-    getVIdeoControl().then(res => videoController.value = res) 
-  },300)
+    getVIdeoControl().then(res => videoController.value = res)
+  },3000)
 }
 function onStatusChange() {
+    console.log(videoController.value.video_status)
     if (videoController.value.video_status === VideoStatus.VOTING) {
         videoController.value.video_status = VideoStatus.STOP
         showButton.value = false
-    }
-    else {
+        console.log('把按鈕改成false')
+    }else {
         videoController.value.video_status = VideoStatus.VOTING
-        showButton.value = true
+        showButton.value = false
+        console.log('把顯示按鈕改成true')
     }
+    console.log('onStatusChange完畢')
 }
 </script>
