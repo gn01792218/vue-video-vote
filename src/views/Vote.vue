@@ -4,9 +4,9 @@
         <div v-if="showButton" class="max-w-[400px]">
             <p class="text-red-500 mb-5">你會怎麼決定呢?!!!</p>
             <p class="text-3xl text-red-500 mb-5">請選擇!</p>
-            <button class="border-2 w-[150px] h-[150px] bg-green-500 mb-5" @click="vote(VideoSide.A)">A</button>
+            <button class="border-2 w-[150px] h-[150px] bg-orange-500 mb-5" @click="vote(VideoSide.A)">A</button>
             <p class="text-2xl mb-5">還是!</p>
-            <button class="border-2 w-[150px] h-[150px] bg-blue-500 " @click="vote(VideoSide.B)">B</button>
+            <button class="border-2 w-[150px] h-[150px] bg-green-500 " @click="vote(VideoSide.B)">B</button>
         </div>
         <div v-else>
             <p class="text-3xl">
@@ -17,9 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import { Video, VideoControler, VideoSide, VideoStatus } from "@/types/video";
+import { VideoControler, VideoSide, VideoStatus } from "@/types/video";
 import { getVIdeoControl, postVote } from "../api"
-const currentVideo = ref<Video>()
 const currentIndex = computed(()=>{
     return Number(videoController.value.current_video_index)
 })
@@ -37,7 +36,6 @@ watch(currentIndex,()=>{
     //關卡改變時
     showButton.value = false
     hasVoted.value = false
-    console.log('改變關卡了初始化,投了嗎',hasVoted.value,'要秀按鈕ㄇ',showButton.value)
 })
 watch(videoController,()=>{
    onStatusChange()
@@ -62,17 +60,14 @@ function intervalData(){
   },2000)
 }
 function onStatusChange() {
-    console.log('當前狀態',videoController.value.video_status)
     switch(Number(videoController.value.video_status)){
         case VideoStatus.VOTING:
             if(hasVoted.value) return
             if(Number(videoController.value.current_video_index) === 4) return
             showButton.value = true
-            console.log('showBtne', showButton.value)
             break
         default:
            showButton.value = false
     }
-    console.log(showButton.value)
 }
 </script>
