@@ -48,7 +48,7 @@ function init() {
 }
 async function vote(side: VideoSide) {
     postVote({
-        video_index: videoController.value.current_video_index,
+        video_index: Number(videoController.value.current_video_index),
         vote_side: side
     })
     showButton.value = false
