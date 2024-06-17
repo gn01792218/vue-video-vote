@@ -7,13 +7,11 @@
         <video ref="videoElement" class="w-full " autoplay controls muted :src="currentVideo ? currentVideo.url : ''">
         </video>
         <div v-show="showVoteInfo" class="w-[80%] absolute bottom-1/4 left-1/2 translate-x-[-50%] flex justify-between">
-            <div class="bg-red-500/40 text-3xl p-1 text-center">
-                <p>A</p>
-                <p>{{ currentVideo?.vote_A }} 人</p>
+            <div class="text-[75px] text-red-500 p-1 text-center">
+                <p class="">{{ currentVideo?.vote_A }}</p>
             </div>
-            <div class="bg-blue-500/40 text-3xl p-1 text-center">
-                <p>B</p>
-                <p>{{ currentVideo?.vote_B }}人</p>
+            <div class="text-[75px] text-red-500 p-1 text-center">
+                <p class="">{{ currentVideo?.vote_B }}</p>
             </div>
         </div>
     </section>
