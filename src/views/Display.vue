@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { videos, videoControl } from '../assets/data/video'
+// import { videos, videoControl } from '../assets/data/video'
 import { getCurrentVideo, getVIdeoControl } from '../api'
 import { VideoStatus, type Video, type VideoControler } from '../types/video';
 const videoElement = ref<HTMLVideoElement | null>(null)
@@ -69,11 +69,11 @@ function detechShowVoteInfo() {
 }
 
 async function init(){
-    // const video = await getCurrentVideo()
-    // const videoControl = await getVIdeoControl()
+    const video = await getCurrentVideo()
+    const videoControl = await getVIdeoControl()
     intavlVideoAndControl()
     registerVideoTimeUpdate()
-    const video = videos[0] //暫時的
+    // const video = videos[0] //暫時的
     videoControler.value = videoControl
     currentVideo.value = video
     playVideo()
@@ -108,15 +108,15 @@ async function onBranchVideoComplete(){
     //進入下一關
     // const video = await getCurrentVideo()
     // currentVideo.value = video
-    monckPlayNextVideo()  
+    // monckPlayNextVideo()  
     playVideo()
     console.log('呼叫分支影片完成')
 }
-function monckPlayNextVideo(){ //暫時的
-    videoControler.value = {
-        current_video_index:videoControler.value.current_video_index+1,
-        video_status:VideoStatus.STOP
-    }
-    currentVideo.value = videos[videoControler.value.current_video_index]
-}
+// function monckPlayNextVideo(){ //暫時的
+//     videoControler.value = {
+//         current_video_index:videoControler.value.current_video_index+1,
+//         video_status:VideoStatus.STOP
+//     }
+//     currentVideo.value = videos[videoControler.value.current_video_index]
+// }
 </script>

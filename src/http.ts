@@ -8,7 +8,7 @@ import axios, {
 
 // axios實例
 const service: AxiosInstance = axios.create({
-  baseURL: "https://api.gamenow.online/api/",
+  baseURL: "https://ebrainzone.com/PVAPI/",
   headers: { "Content-Type": "application/json" },
   timeout: 30000, // 超时时间
 });

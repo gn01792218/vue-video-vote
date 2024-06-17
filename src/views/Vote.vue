@@ -39,14 +39,13 @@ onMounted(() => {
 })
 watch(currentIndex,()=>{
     //關卡改變時
-    alert('關卡改變了!')
     showButton.value = false
 })
 watch(videoController,()=>{
     
 })
 function init() {
-    // getCurrentVideo().then(res => currentVideo.value = res)
+    getCurrentVideo().then(res => currentVideo.value = res)
     // getVIdeoControl().then(res => videoController.value = res)
     intervalData()
     currentVideo.value = videos[0]
@@ -62,8 +61,8 @@ function vote(side: VideoSide) {
 }
 function intervalData(){
   setInterval(()=>{
-   getVIdeoControl().then(res => videoController.value = res) 
-   getCurrentVideo().then(res => currentVideo.value = res)
+    //   getCurrentVideo().then(res => currentVideo.value = res)
+//    getVIdeoControl().then(res => videoController.value = res) 
   },300)
 }
 function mounkStatusChange() {

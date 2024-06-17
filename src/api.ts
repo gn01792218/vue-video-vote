@@ -2,11 +2,11 @@ import req from './http'
 import { Video, VideoControlRequest, VideoControler, VideoVoteRequest } from './types/video'
 
 export async function getCurrentVideo(){ //用來取得使用者們的id
-  const res = await req("get",'video')
+  const res = await req("get",'Video.php')
   return res?.data as Video
 }
 export async function getVIdeoControl(){
-  const res =await req("get", "video/controler")
+  const res =await req("get", "VideoControler.php")
   return res?.data as VideoControler
 }
 export async function postVIdeoControl(payload:VideoControlRequest){
@@ -14,5 +14,5 @@ export async function postVIdeoControl(payload:VideoControlRequest){
   return res?.data as VideoControler
 }
 export async function postVote(payload:VideoVoteRequest){
-  await req("post", "video/vote", {data:payload})
+  await req("post", "Vote.php", {data:payload})
 }
