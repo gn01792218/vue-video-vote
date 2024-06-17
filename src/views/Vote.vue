@@ -64,6 +64,7 @@ function onStatusChange() {
     console.log('當前狀態',videoController.value.video_status)
     switch(Number(videoController.value.video_status)){
         case VideoStatus.VOTING:
+            if(hasVoted.value) return
             showButton.value = true
             console.log('showBtne', showButton.value)
             break
