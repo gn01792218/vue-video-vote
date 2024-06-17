@@ -20,10 +20,9 @@ export declare interface VideoControler{
     current_video_index:number //主控當前撥放的video_index (從0開始即可)
     video_status:VideoStatus
 }
-
 //API請求與回應
 export declare interface VideoVoteRequest{
-    video_id:string, //video的id
+    video_index:number, //video的index
     vote_side:VideoSide, //投哪一邊(值只會給 'A' or 'B')
 }
 export declare interface VideoControlRequest{
