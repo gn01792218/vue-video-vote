@@ -1,9 +1,10 @@
-export declare enum VideoStatus{
+export enum VideoStatus{
     STOP, //停止影片的撥放
-    PLAYING, //播放影片
-    VOTING //投票中，此時大螢幕顯示A、B票數、手機端出現A、B按鈕
+    VOTING, //投票中，此時大螢幕顯示A、B票數、手機端出現A、B按鈕
+    VOTED,  //此時也是主影片撥放完畢的時候
+    BRANCHVIDEOCOMPLETE
 }
-export declare enum VideoSide{
+export enum VideoSide{
     A = 'A',
     B = 'B'
 }

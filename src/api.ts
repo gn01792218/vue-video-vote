@@ -1,9 +1,15 @@
 import req from './http'
+import { Video, VideoControlRequest, VideoControler } from './types/video'
 
-export const getCurrentVideo = ()=>{ //用來取得使用者們的id
-  return req("get",'video')
+export async function getCurrentVideo(){ //用來取得使用者們的id
+  const res = await req("get",'video')
+  return res?.data as Video
 }
-
-// export const postLotteryReport = (payload:PostLotteryReport)=>{
-//   return req("post", "ig-lottery/report", {data:payload})
-// }
+export async function getVIdeoControl(){
+  const res =await req("get", "video/controler")
+  return res?.data as VideoControler
+}
+export async function postVIdeoControl(payload:VideoControlRequest){
+  const res =await req("post", "video/controler", {data:payload})
+  return res?.data as VideoControler
+}
