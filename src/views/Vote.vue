@@ -47,7 +47,6 @@ function init() {
     intervalData()
 }
 async function vote(side: VideoSide) {
-    if (!currentVideo.value) return alert('找不到當前影片')
     postVote({
         video_index: videoController.value.current_video_index,
         vote_side: side

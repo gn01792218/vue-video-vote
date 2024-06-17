@@ -20,3 +20,7 @@ export async function postVIdeoControl(payload:VideoControlRequest){
 export async function postVote(payload:VideoVoteRequest){
   await req("post", "Vote.php", {data:payload})
 }
+export async function reset(){
+  const res = await req("get",`ClearAll.php`)
+  return res?.data as Video
+}
