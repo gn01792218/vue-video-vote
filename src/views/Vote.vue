@@ -41,6 +41,7 @@ watch(currentIndex,()=>{
 watch(videoController,()=>{
    onStatusChange()
 })
+
 function init() {
     getVIdeoControl().then(res => videoController.value = res)
     intervalData()
@@ -57,15 +58,19 @@ async function vote(side: VideoSide) {
 function intervalData(){
   setInterval(()=>{
     getVIdeoControl().then(res => videoController.value = res)
+    onStatusChange()
   },3000)
 }
 function onStatusChange() {
-    switch(videoController.value.video_status){
+    console.log(videoController.value.video_status)
+    switch(Number(videoController.value.video_status)){
         case VideoStatus.VOTING:
             showButton.value = true
+            console.log('showBtne', showButton.value)
             break
         default:
            showButton.value = false
     }
+    console.log(showButton.value)
 }
 </script>
