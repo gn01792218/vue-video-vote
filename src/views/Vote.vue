@@ -1,6 +1,6 @@
 <template>
     <section class="w-[88%] h-screen relative mx-auto text-center flex flex-col items-center justify-center">
-        <p class="text-gary-500">當前關卡{{ Number(videoController.current_video_index) + 1 }}</p>
+        <p class="text-gary-500">當前關卡{{ Number(videoController.current_video_index) +1 }}</p>
         <div v-if="showButton" class="max-w-[400px]">
             <p class="text-red-500 mb-5">你會怎麼決定呢?!!!</p>
             <p class="text-3xl text-red-500 mb-5">請選擇!</p>
@@ -21,7 +21,7 @@ import { Video, VideoControler, VideoSide, VideoStatus } from "@/types/video";
 import { getVIdeoControl, postVote } from "../api"
 const currentVideo = ref<Video>()
 const currentIndex = computed(()=>{
-    return videoController.value.current_video_index
+    return Number(videoController.value.current_video_index)
 })
 const videoController = ref<VideoControler>({
     current_video_index: 0,

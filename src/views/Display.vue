@@ -55,7 +55,7 @@ watch(currentTime,()=>{
     if( videoControler.value.video_status === VideoStatus.BRANCHVIDEOCOMPLETE ) onBranchVideoComplete()
 })
 async function init(){
-    const video = await getVideoByIndex(videoControler.value.current_video_index)
+    const video = await getVideoByIndex(Number(videoControler.value.current_video_index))
     const videoControl = await getVIdeoControl()
     registerVideoTimeUpdate()
     videoControler.value = videoControl
@@ -69,7 +69,7 @@ function setStatus(){ //修改狀態以及通知server
         if(videoControler.value.video_status === VideoStatus.VOTING) return //已經是投票狀態就不需要再改了
         videoControler.value.video_status = VideoStatus.VOTING
         postVIdeoControl({
-            current_video_index:videoControler.value.current_video_index,
+            current_video_index:Number(videoControler.value.current_video_index),
             video_status:VideoStatus.VOTING
         })
     }
@@ -78,7 +78,7 @@ function setStatus(){ //修改狀態以及通知server
         if(videoControler.value.video_status === VideoStatus.VOTED) return //已經是投票狀態就不需要再改了
         videoControler.value.video_status = VideoStatus.VOTED
         postVIdeoControl({
-            current_video_index:videoControler.value.current_video_index,
+            current_video_index:Number(videoControler.value.current_video_index),
             video_status:VideoStatus.VOTED
         })
     }
@@ -89,15 +89,16 @@ function setStatus(){ //修改狀態以及通知server
         videoControler.value.current_video_index++ //播下一部
         console.log(videoControler.value.current_video_index)
         postVIdeoControl({
-            current_video_index:videoControler.value.current_video_index,
+            current_video_index:Number(videoControler.value.current_video_index),
             video_status:VideoStatus.BRANCHVIDEOCOMPLETE
         })
     }
 }
 function detechShowVoteInfo() {
-  if(Number(videoControler.value.current_video_index) === 4) return
+  if(videoControler.value.current_video_index === 4) return
   console.log('當前的影片狀態', videoControler.value.video_status)
-  if(Number(videoControler.value.video_status) === VideoStatus.VOTING && !showInfoInterval.value){ //投票的時候
+  if(Number(videoControler.value.video_status) === VideoStatus.VOTING){ //投票的時候
+    if(showInfoInterval.value) return //已經有interval就不要再設置了
       showVoteInfo.value=true;
       console.log('設置取資料的Intval')
       showInfoInterval.value = setInterval(()=>{
