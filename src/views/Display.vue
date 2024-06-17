@@ -118,6 +118,7 @@ function detechShowVoteInfo() {
 }
 function playVideo() {
     if (!videoElement.value) return
+    if(!videoElement.value.paused) return //已經在播放了就不要重複播放
     videoElement.value.play()
     videoElement.value.muted = false
 }
