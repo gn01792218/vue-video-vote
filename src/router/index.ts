@@ -11,6 +11,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Vote',
     component:()=>import('@/views/Vote.vue')
   },
+  {
+    path: '/videoControl',
+    name: 'VideoControl',
+    component:()=>import('@/views/VideoControl.vue')
+  },
 ]
 
 const router = createRouter({

@@ -63,7 +63,9 @@ async function init(){
     playVideo()
 }
 function setStatus(){ //修改狀態以及通知server
-    if( videoProgress.value >= 87 && !isBranchVideo.value) {
+    console.log('當前的狀態', videoControler.value.video_status)
+    if( videoProgress.value >= 87 && videoProgress.value <100 && !isBranchVideo.value) {
+        console.log('投票中，前一個狀態為', videoControler.value.video_status)
         if(videoControler.value.video_status === VideoStatus.VOTING) return //已經是投票狀態就不需要再改了
         videoControler.value.video_status = VideoStatus.VOTING
         postVIdeoControl({
@@ -72,6 +74,7 @@ function setStatus(){ //修改狀態以及通知server
         })
     }
     if( videoProgress.value === 100 && !isBranchVideo.value) {
+        console.log('投票完了，前一個狀態為', videoControler.value.video_status)
         if(videoControler.value.video_status === VideoStatus.VOTED) return //已經是投票狀態就不需要再改了
         videoControler.value.video_status = VideoStatus.VOTED
         postVIdeoControl({
@@ -80,6 +83,7 @@ function setStatus(){ //修改狀態以及通知server
         })
     }
     if( videoProgress.value === 100 && isBranchVideo.value ) {
+        console.log('分支影片播完了，前一個狀態為', videoControler.value.video_status)
         if(videoControler.value.video_status === VideoStatus.BRANCHVIDEOCOMPLETE) return //已經是投票狀態就不需要再改了
         videoControler.value.video_status = VideoStatus.BRANCHVIDEOCOMPLETE
         videoControler.value.current_video_index+=1 //播下一部
@@ -105,6 +109,7 @@ function detechShowVoteInfo() {
         if(!showInfoInterval.value) return
         clearInterval(showInfoInterval.value)
         showInfoInterval.value = null
+        console.log('清除interfval', videoControler.value)
   }
 }
 function playVideo(){
@@ -113,6 +118,7 @@ function playVideo(){
     videoElement.value.muted = false
 }
 function onVideoVoteComplete(){
+    console.log('主影片撥放完成')
     if(!currentVideo.value) return alert('找不到當前的影片資料!')
     const { vote_A, vote_B, branch_A_url, branch_B_url } = currentVideo.value
     if(vote_A > vote_B) currentVideo.value.url = branch_A_url
