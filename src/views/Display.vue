@@ -26,6 +26,7 @@ const videoControler = ref<VideoControler>({
     current_video_index: 0,
     video_status: VideoStatus.STOP
 })
+const votingProgress = ref(87) //幾%的時候要呈現投票
 const currentVIdeoVoteing = computed(() => {
     return currentVideo.value && (currentVideo.value?.vote_A > 0 || currentVideo.value.vote_B > 0)
 })
@@ -47,6 +48,7 @@ watch(videoControler, () => {
 
 })
 watch(currentTime, () => {
+    setVotingProgress()
     setStatus()
     detechShowVoteInfo();
     if (Number(videoControler.value.video_status) === VideoStatus.VOTED) onVideoVoteComplete()
@@ -60,9 +62,23 @@ async function init() {
     currentVideo.value = video
     playVideo()
 }
+function setVotingProgress(){ //設置個關卡要顯示投票的%數
+    switch(Number(videoControler.value.current_video_index)){
+        case 1:
+            votingProgress.value = 82
+            break
+        case 2:
+            votingProgress.value = 80
+            break
+        case 3:
+            votingProgress.value = 95
+            break
+    }
+
+}
 function setStatus() { //修改狀態以及通知server
     console.log('當前的狀態', videoControler.value.video_status)
-    if (videoProgress.value >= 87 && videoProgress.value < 100 && !isBranchVideo.value) {
+    if (videoProgress.value >= votingProgress.value && videoProgress.value < 100 && !isBranchVideo.value) {
         console.log('投票中，前一個狀態為', videoControler.value.video_status)
         if (videoControler.value.video_status === VideoStatus.VOTING) return //已經是投票狀態就不需要再改了
         videoControler.value.video_status = VideoStatus.VOTING
@@ -93,7 +109,7 @@ function setStatus() { //修改狀態以及通知server
     }
 }
 function detechShowVoteInfo() {
-    if (videoControler.value.current_video_index === 4) return
+    if (Number(videoControler.value.current_video_index) === 4) return
     console.log('當前的影片狀態', videoControler.value.video_status)
     if (Number(videoControler.value.video_status) === VideoStatus.VOTING) { //投票的時候
         if (showInfoInterval.value) return //已經有interval就不要再設置了
