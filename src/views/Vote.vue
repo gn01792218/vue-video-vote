@@ -1,6 +1,6 @@
 <template>
     <section class="w-[88%] h-screen relative mx-auto text-center flex flex-col items-center justify-center">
-        <p class="text-gary-500">當前關卡{{ videoController.current_video_index + 1 }}</p>
+        <p class="text-gary-500">當前關卡{{ Number(videoController.current_video_index) + 1 }}</p>
         <div v-if="showButton" class="max-w-[400px]">
             <p class="text-red-500 mb-5">你會怎麼決定呢?!!!</p>
             <p class="text-3xl text-red-500 mb-5">請選擇!</p>
@@ -61,7 +61,7 @@ function intervalData(){
   },3000)
 }
 function onStatusChange() {
-    console.log(videoController.value.video_status)
+    console.log('當前狀態',videoController.value.video_status)
     switch(Number(videoController.value.video_status)){
         case VideoStatus.VOTING:
             showButton.value = true
