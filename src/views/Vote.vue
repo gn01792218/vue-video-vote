@@ -1,11 +1,11 @@
 <template>
-    <button @click="mounkStatusChange">假裝狀態改變</button>
-    <button class="block" @click="mounkNext">下一關</button>
+    <!-- <button @click="mounkStatusChange">假裝狀態改變</button>
+    <button class="block" @click="mounkNext">下一關</button> -->
     <section class="w-[88%] h-screen relative mx-auto text-center flex flex-col items-center justify-center">
         <p class="text-gary-500">當前關卡{{ videoController.current_video_index + 1 }}</p>
-        <p>{{ showButton }}</p>
-        <p>{{ videoController.video_status }}</p>
-        <div v-if="showButton && videoController.video_status === VideoStatus.VOTING" class="max-w-[400px]">
+        <!-- <p>{{ showButton }}</p>
+        <p>{{ videoController.video_status }}</p> -->
+        <div v-if="showButton" class="max-w-[400px]">
             <p class="text-red-500 mb-5">你會怎麼決定呢?!!!</p>
             <p class="text-3xl text-red-500 mb-5">請選擇!</p>
             <button class="border-2 w-[150px] h-[150px] bg-green-500 mb-5" @click="vote(VideoSide.A)">A</button>
@@ -33,6 +33,7 @@ const videoController = ref<VideoControler>({
     video_status: VideoStatus.STOP
 })
 const showButton = ref(false)
+const hasVoted = ref(false)
 
 onMounted(() => {
     init()
@@ -42,13 +43,13 @@ watch(currentIndex,()=>{
     showButton.value = false
 })
 watch(videoController,()=>{
-    
+   if(videoController.value.video_status === VideoStatus.VOTING) showButton.value = true 
 })
 function init() {
     getCurrentVideo().then(res => currentVideo.value = res)
-    // getVIdeoControl().then(res => videoController.value = res)
+    getVIdeoControl().then(res => videoController.value = res)
     intervalData()
-    currentVideo.value = videos[0]
+    // currentVideo.value = videos[0]
 }
 function vote(side: VideoSide) {
     if (!currentVideo.value) return alert('找不到當前影片')
@@ -58,27 +59,28 @@ function vote(side: VideoSide) {
         vote_side: side
     })
     showButton.value = false
+    hasVoted.value = true
 }
 function intervalData(){
   setInterval(()=>{
-    //   getCurrentVideo().then(res => currentVideo.value = res)
-//    getVIdeoControl().then(res => videoController.value = res) 
+    getCurrentVideo().then(res => currentVideo.value = res)
+    getVIdeoControl().then(res => videoController.value = res) 
   },300)
 }
-function mounkStatusChange() {
-    if (videoController.value.video_status === VideoStatus.VOTING) {
-        videoController.value.video_status = VideoStatus.STOP
-        showButton.value = false
-    }
-    else {
-        videoController.value.video_status = VideoStatus.VOTING
-        showButton.value = true
-    }
-}
-function mounkNext(){
-    videoController.value = {
-        current_video_index:videoController.value.current_video_index+1,
-        video_status:VideoStatus.STOP
-    }
-}
+// function mounkStatusChange() {
+//     if (videoController.value.video_status === VideoStatus.VOTING) {
+//         videoController.value.video_status = VideoStatus.STOP
+//         showButton.value = false
+//     }
+//     else {
+//         videoController.value.video_status = VideoStatus.VOTING
+//         showButton.value = true
+//     }
+// }
+// function mounkNext(){
+//     videoController.value = {
+//         current_video_index:videoController.value.current_video_index+1,
+//         video_status:VideoStatus.STOP
+//     }
+// }
 </script>

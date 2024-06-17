@@ -20,14 +20,16 @@
 </template>
 
 <script setup lang="ts">
-// import { videos, videoControl } from '../assets/data/video'
-import { getCurrentVideo, getVIdeoControl } from '../api'
+import { getCurrentVideo, getVIdeoControl, postVIdeoControl } from '../api'
 import { VideoStatus, type Video, type VideoControler } from '../types/video';
 const videoElement = ref<HTMLVideoElement | null>(null)
 const currentVideo = ref<Video| null>(null)
 const videoControler = ref<VideoControler>({
     current_video_index:0,
     video_status:VideoStatus.STOP
+})
+const currentVIdeoVoteing = computed(()=>{
+    return currentVideo.value && (currentVideo.value?.vote_A>0 || currentVideo.value.vote_B>0)
 })
 const isBranchVideo = computed(()=>{
     return currentVideo.value?.url.includes('A.mp4') || currentVideo.value?.url.includes('B.mp4')
@@ -51,23 +53,6 @@ watch(currentTime,()=>{
     if (videoControler.value.video_status === VideoStatus.VOTED ) onVideoVoteComplete()
     if( videoControler.value.video_status === VideoStatus.BRANCHVIDEOCOMPLETE ) onBranchVideoComplete()
 })
-function setStatus(){
-    if( videoProgress.value >= 87 && !isBranchVideo.value) videoControler.value.video_status = VideoStatus.VOTING
-    if( videoProgress.value === 100 && !isBranchVideo.value) videoControler.value.video_status = VideoStatus.VOTED
-    if( videoProgress.value === 100 && isBranchVideo.value ) videoControler.value.video_status = VideoStatus.BRANCHVIDEOCOMPLETE
-    //暫時的
-    if(videoProgress.value >50 && currentVideo.value) {
-        currentVideo.value.vote_A = 5
-    }
-}
-function detechShowVoteInfo() {
-  if(videoControler.value.current_video_index === 4) return 
-  if(videoControler.value.video_status === VideoStatus.VOTING) //投票狀態下才顯示
-    showVoteInfo.value=true;
-  else
-    showVoteInfo.value=false;
-}
-
 async function init(){
     const video = await getCurrentVideo()
     const videoControl = await getVIdeoControl()
@@ -78,22 +63,40 @@ async function init(){
     currentVideo.value = video
     playVideo()
 }
+function setStatus(){ //修改狀態以及通知server
+    if( videoProgress.value >= 87 && !isBranchVideo.value) {
+        videoControler.value.video_status = VideoStatus.VOTING
+        postVIdeoControl({
+            current_video_index:videoControler.value.current_video_index,
+            video_status:VideoStatus.VOTING
+        })
+    }
+    if( videoProgress.value === 100 && !isBranchVideo.value) {
+        videoControler.value.video_status = VideoStatus.VOTED
+        postVIdeoControl({
+            current_video_index:videoControler.value.current_video_index,
+            video_status:VideoStatus.VOTED
+        })
+    }
+    if( videoProgress.value === 100 && isBranchVideo.value ) {
+        videoControler.value.video_status = VideoStatus.BRANCHVIDEOCOMPLETE
+        postVIdeoControl({
+            current_video_index:videoControler.value.current_video_index,
+            video_status:VideoStatus.BRANCHVIDEOCOMPLETE
+        })
+    }
+}
+function detechShowVoteInfo() {
+  if(videoControler.value.current_video_index === 4) return 
+  if(videoControler.value.video_status === VideoStatus.VOTING && currentVIdeoVoteing.value) //投票狀態下才顯示
+    showVoteInfo.value=true;
+  else
+    showVoteInfo.value=false;
+}
 function playVideo(){
     if(!videoElement.value) return 
     videoElement.value.play()
     videoElement.value.muted = false
-}
-function registerVideoTimeUpdate(){
-    videoElement.value?.addEventListener('timeupdate', ()=>{
-        if(!videoElement.value) return 
-        currentTime.value = videoElement.value.currentTime
-    })
-}
-function intavlVideoAndControl(){
-    setInterval(async()=>{
-       getCurrentVideo().then(res=>currentVideo.value = res)
-       getVIdeoControl().then(res=>videoControler.value = res)
-    }, 3000)
 }
 function onVideoVoteComplete(){
     if(!currentVideo.value) return alert('找不到當前的影片資料!')
@@ -106,17 +109,22 @@ function onVideoVoteComplete(){
 }
 async function onBranchVideoComplete(){
     //進入下一關
-    // const video = await getCurrentVideo()
-    // currentVideo.value = video
-    // monckPlayNextVideo()  
+    const video = await getCurrentVideo()
+    const control = await getVIdeoControl()
+    currentVideo.value = video //更新下一關的video
+    videoControler.value = control  //更新controler的狀態
     playVideo()
-    console.log('呼叫分支影片完成')
 }
-// function monckPlayNextVideo(){ //暫時的
-//     videoControler.value = {
-//         current_video_index:videoControler.value.current_video_index+1,
-//         video_status:VideoStatus.STOP
-//     }
-//     currentVideo.value = videos[videoControler.value.current_video_index]
-// }
+function registerVideoTimeUpdate(){
+    videoElement.value?.addEventListener('timeupdate', ()=>{
+        if(!videoElement.value) return 
+        currentTime.value = videoElement.value.currentTime
+    })
+}
+function intavlVideoAndControl(){
+    setInterval(async()=>{
+    //    getCurrentVideo().then(res=>currentVideo.value = res)
+    //    getVIdeoControl().then(res=>videoControler.value = res)
+    }, 3000)
+}
 </script>
