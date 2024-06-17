@@ -66,7 +66,7 @@ function onStatusChange() {
     switch(Number(videoController.value.video_status)){
         case VideoStatus.VOTING:
             if(hasVoted.value) return
-            if(Number(videoController.value.video_status) === 4) return
+            if(Number(videoController.value.current_video_index) === 4) return
             showButton.value = true
             console.log('showBtne', showButton.value)
             break

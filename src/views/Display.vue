@@ -97,12 +97,12 @@ function setStatus(){ //修改狀態以及通知server
 function detechShowVoteInfo() {
   if(Number(videoControler.value.current_video_index) === 4) return
   console.log('當前的影片狀態', videoControler.value.video_status)
-  if(videoControler.value.video_status === VideoStatus.VOTING && !showInfoInterval.value){ //投票的時候
+  if(Number(videoControler.value.video_status) === VideoStatus.VOTING && !showInfoInterval.value){ //投票的時候
       showVoteInfo.value=true;
       console.log('設置取資料的Intval')
       showInfoInterval.value = setInterval(()=>{
         console.log('發送取資料的API')
-       getVideoByIndex(videoControler.value.current_video_index).then(res=>currentVideo.value = res) 
+       getVideoByIndex(Number(videoControler.value.current_video_index)).then(res=>currentVideo.value = res) 
       },1000)
   }else {
       //非投票的時候
