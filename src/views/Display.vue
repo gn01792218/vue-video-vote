@@ -2,7 +2,7 @@
     <section class="w-[88%] relative mx-auto">
         <p>
             當前關卡 :
-            {{ videoControler.current_video_index +1 }}
+            {{ Number(videoControler.current_video_index) +1 }}
         </p>
         <video ref="videoElement" class="w-full " autoplay controls muted :src="currentVideo? currentVideo.url : ''">
         </video>
@@ -24,6 +24,9 @@ import { getVIdeoControl, postVIdeoControl, getVideoByIndex } from '../api'
 import { VideoStatus, type Video, type VideoControler } from '../types/video';
 const videoElement = ref<HTMLVideoElement | null>(null)
 const currentVideo = ref<Video| null>(null)
+const currentINdex = computed(()=>{
+    return Number(videoControler.value)+1
+})
 const videoControler = ref<VideoControler>({
     current_video_index:0,
     video_status:VideoStatus.STOP
@@ -86,7 +89,8 @@ function setStatus(){ //修改狀態以及通知server
         console.log('分支影片播完了，前一個狀態為', videoControler.value.video_status)
         if(videoControler.value.video_status === VideoStatus.BRANCHVIDEOCOMPLETE) return //已經是投票狀態就不需要再改了
         videoControler.value.video_status = VideoStatus.BRANCHVIDEOCOMPLETE
-        videoControler.value.current_video_index+=1 //播下一部
+        videoControler.value.current_video_index++ //播下一部
+        console.log(videoControler.value.current_video_index)
         postVIdeoControl({
             current_video_index:videoControler.value.current_video_index,
             video_status:VideoStatus.BRANCHVIDEOCOMPLETE
@@ -94,7 +98,7 @@ function setStatus(){ //修改狀態以及通知server
     }
 }
 function detechShowVoteInfo() {
-  if(videoControler.value.current_video_index === 4) return 
+  if(Number(videoControler.value.current_video_index) === 4) return
   console.log('當前的影片狀態', videoControler.value.video_status)
   if(videoControler.value.video_status === VideoStatus.VOTING && !showInfoInterval.value){ //投票的時候
       showVoteInfo.value=true;
