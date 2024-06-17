@@ -91,16 +91,21 @@ function setStatus(){ //修改狀態以及通知server
 }
 function detechShowVoteInfo() {
   if(videoControler.value.current_video_index === 4) return 
-  if(videoControler.value.video_status === VideoStatus.VOTING){
+  console.log('當前的影片狀態', videoControler.value.video_status)
+  if(videoControler.value.video_status === VideoStatus.VOTING && !showInfoInterval.value){ //投票的時候
       showVoteInfo.value=true;
+      console.log('設置取資料的Intval')
       showInfoInterval.value = setInterval(()=>{
+        console.log('發送取資料的API')
        getVideoByIndex(videoControler.value.current_video_index).then(res=>currentVideo.value = res) 
       },1000)
-  }else
-    showVoteInfo.value=false
-    if(!showInfoInterval.value) return
-    clearInterval(showInfoInterval.value)
-    showInfoInterval.value = null
+  }else {
+      //非投票的時候
+        showVoteInfo.value=false
+        if(!showInfoInterval.value) return
+        clearInterval(showInfoInterval.value)
+        showInfoInterval.value = null
+  }
 }
 function playVideo(){
     if(!videoElement.value) return 
