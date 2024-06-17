@@ -10,7 +10,7 @@ export async function getVIdeoControl(){
   return res?.data as VideoControler
 }
 export async function postVIdeoControl(payload:VideoControlRequest){
-  const res =await req("post", "video/controler", {data:payload})
+  const res =await req("post", "VideoControler.php", {data:payload})
   return res?.data as VideoControler
 }
 export async function postVote(payload:VideoVoteRequest){
