@@ -37,6 +37,7 @@ watch(currentIndex,()=>{
     //關卡改變時
     showButton.value = false
     hasVoted.value = false
+    console.log('改變關卡了初始化,投了嗎',hasVoted.value,'要秀按鈕ㄇ',showButton.value)
 })
 watch(videoController,()=>{
    onStatusChange()
@@ -58,13 +59,14 @@ function intervalData(){
   setInterval(()=>{
     getVIdeoControl().then(res => videoController.value = res)
     onStatusChange()
-  },3000)
+  },2000)
 }
 function onStatusChange() {
     console.log('當前狀態',videoController.value.video_status)
     switch(Number(videoController.value.video_status)){
         case VideoStatus.VOTING:
             if(hasVoted.value) return
+            if(Number(videoController.value.video_status) === 4) return
             showButton.value = true
             console.log('showBtne', showButton.value)
             break

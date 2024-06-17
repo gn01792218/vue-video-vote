@@ -24,9 +24,6 @@ import { getVIdeoControl, postVIdeoControl, getVideoByIndex } from '../api'
 import { VideoStatus, type Video, type VideoControler } from '../types/video';
 const videoElement = ref<HTMLVideoElement | null>(null)
 const currentVideo = ref<Video| null>(null)
-const currentINdex = computed(()=>{
-    return Number(videoControler.value)+1
-})
 const videoControler = ref<VideoControler>({
     current_video_index:0,
     video_status:VideoStatus.STOP
@@ -133,7 +130,7 @@ function onVideoVoteComplete(){
 async function onBranchVideoComplete(){
     //進入下一關
     console.log('準備進入下一關，currentIndex改成', videoControler.value.current_video_index)
-    const video = await getVideoByIndex(videoControler.value.current_video_index)
+    const video = await getVideoByIndex(Number(videoControler.value.current_video_index))
     const control = await getVIdeoControl()
     currentVideo.value = video //更新下一關的video
     videoControler.value = control  //更新controler的狀態
