@@ -27,9 +27,6 @@ const videoControler = ref<VideoControler>({
     video_status: VideoStatus.STOP
 })
 const votingProgress = ref(87) //幾%的時候要呈現投票
-const currentVIdeoVoteing = computed(() => {
-    return currentVideo.value && (currentVideo.value?.vote_A > 0 || currentVideo.value.vote_B > 0)
-})
 const isBranchVideo = computed(() => {
     return currentVideo.value?.url.includes('A.mp4') || currentVideo.value?.url.includes('B.mp4')
 })
@@ -43,9 +40,6 @@ const videoProgress = computed(() => {
 })
 onMounted(async () => {
     init()
-})
-watch(videoControler, () => {
-
 })
 watch(currentTime, () => {
     setVotingProgress()
@@ -74,7 +68,6 @@ function setVotingProgress(){ //設置個關卡要顯示投票的%數
             votingProgress.value = 95
             break
     }
-
 }
 function setStatus() { //修改狀態以及通知server
     console.log('當前的狀態', videoControler.value.video_status)
@@ -101,7 +94,6 @@ function setStatus() { //修改狀態以及通知server
         if (videoControler.value.video_status === VideoStatus.BRANCHVIDEOCOMPLETE) return //已經播完分支影片就不需要再改了
         videoControler.value.video_status = VideoStatus.BRANCHVIDEOCOMPLETE
         videoControler.value.current_video_index++ //播下一部
-        console.log(videoControler.value.current_video_index)
         postVIdeoControl({
             current_video_index: Number(videoControler.value.current_video_index),
             video_status: VideoStatus.BRANCHVIDEOCOMPLETE
@@ -110,7 +102,6 @@ function setStatus() { //修改狀態以及通知server
 }
 function detechShowVoteInfo() {
     if (Number(videoControler.value.current_video_index) === 4) return
-    console.log('當前的影片狀態', videoControler.value.video_status)
     if (Number(videoControler.value.video_status) === VideoStatus.VOTING) { //投票的時候
         if (showInfoInterval.value) return //已經有interval就不要再設置了
         showVoteInfo.value = true;
@@ -137,7 +128,6 @@ function onVideoVoteComplete() {
     else if (vote_A === vote_B) currentVideo.value.url = branch_B_url
     else currentVideo.value.url = branch_B_url
     playVideo()
-    console.log('主影片撥放完成')
 }
 async function onBranchVideoComplete() {
     //進入下一關
