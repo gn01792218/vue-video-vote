@@ -4,7 +4,7 @@
             當前關卡 :
             {{ Number(videoControler.current_video_index) + 1 }}
         </p>
-        <video ref="videoElement" class="w-full " autoplay controls muted :src="currentVideo ? currentVideo.url : ''">
+        <video ref="videoElement" class="w-full " controls muted :src="currentVideo ? currentVideo.url : ''">
         </video>
         <div v-show="showVoteInfo" class="w-[80%] absolute bottom-1/4 left-1/2 translate-x-[-50%] flex justify-between">
             <div class="text-[75px] text-red-500 p-1 text-center">
@@ -93,7 +93,7 @@ function setStatus() { //修改狀態以及通知server
         console.log('分支影片播完了，前一個狀態為', videoControler.value.video_status)
         if (videoControler.value.video_status === VideoStatus.BRANCHVIDEOCOMPLETE) return //已經播完分支影片就不需要再改了
         videoControler.value.video_status = VideoStatus.BRANCHVIDEOCOMPLETE
-        videoControler.value.current_video_index++ //播下一部
+        videoControler.value.current_video_index+=1 //播下一部
         postVIdeoControl({
             current_video_index: Number(videoControler.value.current_video_index),
             video_status: VideoStatus.BRANCHVIDEOCOMPLETE
@@ -121,6 +121,7 @@ function playVideo() {
     if(!videoElement.value.paused) return //已經在播放了就不要重複播放
     videoElement.value.play()
     videoElement.value.muted = false
+    console.log('播放影片', videoElement.value.src)
 }
 function onVideoVoteComplete() {
     if (!currentVideo.value) return alert('找不到當前的影片資料!')
@@ -128,6 +129,7 @@ function onVideoVoteComplete() {
     if (vote_A > vote_B) currentVideo.value.url = branch_A_url
     else if (vote_A === vote_B) currentVideo.value.url = branch_B_url
     else currentVideo.value.url = branch_B_url
+    console.log('播放分支影片', videoControler.value.current_video_index , '狀態', videoControler.value.video_status)
     playVideo()
 }
 async function onBranchVideoComplete() {
