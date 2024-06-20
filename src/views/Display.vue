@@ -60,6 +60,7 @@ async function init() {
     videoControler.value = videoControl
     currentVideo.value = video
     playVideo()
+   
 }
 function setVotingProgress() { //設置個關卡要顯示投票的%數
     switch (videoControler.value.current_video_index) {
@@ -73,13 +74,13 @@ function setVotingProgress() { //設置個關卡要顯示投票的%數
             votingProgress.value = 96
             break
         case 4:
-            votingProgress.value = 31
+            votingProgress.value = 32
             break
     }
 }
 function setStatus() { //修改狀態以及通知server
-    if (videoProgress.value > 43 && videoControler.value.current_video_index === last_video_Index.value ) {  //最後一支影片要設置的關閉投票顯示
-        if(videoControler.value.video_status === VideoStatus.BRANCHVIDEOCOMPLETE) return
+    if (videoProgress.value > 43 && videoControler.value.current_video_index === last_video_Index.value) {  //最後一支影片要設置的關閉投票顯示
+        if (videoControler.value.video_status === VideoStatus.BRANCHVIDEOCOMPLETE) return
         showVoteInfo.value = false
         videoControler.value.video_status = VideoStatus.BRANCHVIDEOCOMPLETE
         postVIdeoControl({

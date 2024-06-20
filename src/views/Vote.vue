@@ -21,8 +21,11 @@
             </button>
         </div>
         <div v-else class="absolute">
-            <p class="text-3xl">
-                {{ votedText }}
+            <p class="text-3xl font-extrabold">
+                請繼續觀賞 P&C Showtime
+            </p>
+            <p>
+                Please turn your attention back to the main screen
             </p>
         </div>
     </section>
@@ -46,7 +49,6 @@ const videoController = ref<VideoControler>({
 const currentVIdeo = ref<Video | null>(null)
 const showButton = ref(false)
 const hasVoted = ref(false)
-const votedText = ref('請繼續觀賞影片')
 
 onMounted(() => {
     init()
