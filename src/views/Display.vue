@@ -1,11 +1,11 @@
 <template>
     <section class="w-full bg-black">
-        <div class="w-[88%] relative mx-auto">
+        <div id="fullScreen" class="w-[88%] relative mx-auto">
             <!-- <p>
                 當前關卡 :
                 {{ Number(videoControler.current_video_index) + 1 }}
             </p> -->
-            <video ref="videoElement" class="w-full" autoplay controls muted
+            <video ref="videoElement" @play="fullScreen" class="w-full" autoplay controls muted
                 :src="currentVideo ? currentVideo.url : ''">
             </video>
             <div v-show="showVoteInfo"
@@ -24,6 +24,7 @@
 <script setup lang="ts">
 import { getVIdeoControl, postVIdeoControl, getVideoByIndex } from '../api'
 import { VideoStatus, type Video, type VideoControler } from '../types/video';
+import screenfull from 'screenfull';
 const videoElement = ref<HTMLVideoElement | null>(null)
 const currentVideo = ref<Video | null>(null)
 const videoControler = ref<VideoControler>({
@@ -60,7 +61,7 @@ async function init() {
     videoControler.value = videoControl
     currentVideo.value = video
     playVideo()
-   
+    
 }
 function setVotingProgress() { //設置個關卡要顯示投票的%數
     switch (videoControler.value.current_video_index) {
@@ -137,9 +138,9 @@ function detechShowVoteInfo() {
 }
 function playVideo() {
     if (!videoElement.value) return
+    
     videoElement.value.play()
     videoElement.value.muted = false
-    // alert(`播放影片${videoElement.value.src}`)
 }
 function onVideoVoteComplete() {
     if (!currentVideo.value) return alert('找不到當前的影片資料!')
@@ -171,5 +172,12 @@ function registerVideoTimeUpdate() {
         if (!videoElement.value) return
         currentTime.value = videoElement.value.currentTime
     })
+}
+function fullScreen(){
+    if(screenfull.isEnabled){
+        const f = document.getElementById('fullScreen')
+        if(f)screenfull.request(f)
+        console.log('全螢幕',f)
+    }
 }
 </script>
