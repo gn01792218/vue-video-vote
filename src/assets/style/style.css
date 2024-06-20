@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .display-text {
-    -webkit-text-stroke: 1px black;
+    -webkit-text-stroke: 1px white;
     @apply text-[75px] font-extrabold;
 }
 

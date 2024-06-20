@@ -73,7 +73,7 @@ function setVotingProgress() { //設置個關卡要顯示投票的%數
             votingProgress.value = 96
             break
         case 4:
-            votingProgress.value = 23
+            votingProgress.value = 31
             break
     }
 }
