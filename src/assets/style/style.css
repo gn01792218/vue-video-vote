@@ -1,67 +1,14 @@
-@tailwind base; 
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-.text-stroke{
-    -webkit-text-stroke: 1px black ;
-    color:white;
+.display-text {
+    -webkit-text-stroke: 1px black;
+    @apply text-[75px] font-extrabold;
 }
 
-.newsTickerAnimate{
-    animation: newsTicker 30s linear infinite;
-}
-.newsTickerAnimate2{
-    animation: newsTicker2 30s linear infinite;
-    animation-delay: -15s;
-}
-
-@keyframes newsTicker {
-    0%{
-        transform: translateX(100%);
-    }
-    100%{
-        transform: translateX(-100%);
-    }
-}
-@keyframes newsTicker2 {
-    0%{
-        transform: translateX(0%);
-    }
-    100%{
-        transform: translateX(-200%);
-    }
-}
-
-.newsTicker .list{
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-}
-#newsTicker-1{
-    transform: rotate(30deg) translateY(200px) translateX(500px);
-}
-#newsTicker-2{
-    transform: rotate(-30deg) translateY(200px) translateX(-200px);
-}
-#newsTicker-3{
-    transform: rotate(25deg) translateY(200px) translateX(-200px);
-}
-#newsTicker-4{
-    transform: rotate(-25deg) translateY(200px) translateX(-200px);
-}
-#newsTicker-5{
-    transform: rotate(5deg) translateY(100px) translateX(-100px);
-}
-#newsTicker-6{
-    transform: rotate(-5deg) translateY(170px) translateX(-300px);
-}
-#newsTicker-7{
-    transform: rotate(-20deg) translateY(-500px) translateX(-300px);
-}
-#newsTicker-8{
-    transform: rotate(-50deg) translateY(300px) translateX(-300px);
-}
-#newsTicker-9{
-    transform: rotate(50deg) translateY(300px) translateX(-300px);
-}
-#newsTicker-10{
-    transform: rotate(-80deg) translateY(0px) translateX(-0px);
+::-webkit-scrollbar {
+    width: 0px;
+    /*竖向滚动条的宽度*/
+    height: 0px;/*横向滚动条的高度*/
 }

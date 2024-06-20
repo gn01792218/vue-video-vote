@@ -1,17 +1,21 @@
 <template>
-    <section class="w-[88%] relative mx-auto">
-        <p>
-            當前關卡 :
-            {{ Number(videoControler.current_video_index) + 1 }}
-        </p>
-        <video ref="videoElement" class="w-full" autoplay controls muted :src="currentVideo ? currentVideo.url : ''">
-        </video>
-        <div v-show="showVoteInfo" class="w-[80%] absolute bottom-1/4 left-1/2 translate-x-[-50%] flex justify-between">
-            <div class="text-[75px] text-red-500 p-1 text-center">
-                <p class="">{{ currentVideo?.vote_A }}</p>
-            </div>
-            <div class="text-[75px] text-red-500 p-1 text-center">
-                <p class="">{{ currentVideo?.vote_B }}</p>
+    <section class="w-full bg-black">
+        <div class="w-[88%] relative mx-auto">
+            <!-- <p>
+                當前關卡 :
+                {{ Number(videoControler.current_video_index) + 1 }}
+            </p> -->
+            <video ref="videoElement" class="w-full" autoplay controls muted
+                :src="currentVideo ? currentVideo.url : ''">
+            </video>
+            <div v-show="showVoteInfo"
+                class="w-[80%] absolute bottom-[30%] left-1/2 translate-x-[-50%] flex justify-between">
+                <div class="text-orange-500 display-text">
+                    <p class="">{{ currentVideo?.vote_A }}</p>
+                </div>
+                <div class="text-green-500 display-text">
+                    <p class="">{{ currentVideo?.vote_B }}</p>
+                </div>
             </div>
         </div>
     </section>
@@ -33,6 +37,7 @@ const isBranchVideo = computed(() => {
 const currentTime = ref(0)
 const showVoteInfo = ref(false)
 const showInfoInterval = ref<NodeJS.Timer | null>(null)
+const last_video_Index = ref(4) //第幾支影片是最後一支影片
 
 const videoProgress = computed(() => {
     if (!videoElement.value) return 0
@@ -67,11 +72,23 @@ function setVotingProgress() { //設置個關卡要顯示投票的%數
         case 3:
             votingProgress.value = 95
             break
+        case 4:
+            votingProgress.value = 23
+            break
     }
 }
 function setStatus() { //修改狀態以及通知server
+    if (videoProgress.value > 43 && videoControler.value.current_video_index === last_video_Index.value ) {  //最後一支影片要設置的關閉投票顯示
+        if(videoControler.value.video_status === VideoStatus.BRANCHVIDEOCOMPLETE) return
+        showVoteInfo.value = false
+        videoControler.value.video_status = VideoStatus.BRANCHVIDEOCOMPLETE
+        postVIdeoControl({
+            current_video_index: videoControler.value.current_video_index,
+            video_status: VideoStatus.BRANCHVIDEOCOMPLETE
+        })
+    }
     if (videoProgress.value >= votingProgress.value && videoProgress.value < 100 && !isBranchVideo.value) {
-        if (videoControler.value.video_status === VideoStatus.VOTING) return //已經是投票狀態就不需要再改了
+        if (videoControler.value.video_status >= VideoStatus.VOTING) return //已經是投票狀態就不需要再改了
         console.log('投票中，前一個狀態為', videoControler.value.video_status)
         videoControler.value.video_status = VideoStatus.VOTING
         postVIdeoControl({
@@ -80,7 +97,7 @@ function setStatus() { //修改狀態以及通知server
         })
     }
     if (videoProgress.value === 100 && !isBranchVideo.value) {
-        if (videoControler.value.video_status === VideoStatus.VOTED) return //已經是投票狀態就不需要再改了
+        if (videoControler.value.video_status >= VideoStatus.VOTED) return //已經是投票狀態就不需要再改了
         console.log('投票完了，前一個狀態為', videoControler.value.video_status)
         videoControler.value.video_status = VideoStatus.VOTED
         postVIdeoControl({
@@ -89,23 +106,17 @@ function setStatus() { //修改狀態以及通知server
         })
     }
     if (videoProgress.value === 100 && isBranchVideo.value) {
-        if (videoControler.value.video_status === VideoStatus.BRANCHVIDEOCOMPLETE) return //已經播完分支影片就不需要再改了
+        if (videoControler.value.video_status >= VideoStatus.BRANCHVIDEOCOMPLETE) return //已經播完分支影片就不需要再改了
         console.log('分支影片播完了，前一個狀態為', videoControler.value.video_status)
         videoControler.value.video_status = VideoStatus.BRANCHVIDEOCOMPLETE
-        
+
         postVIdeoControl({
             current_video_index: videoControler.value.current_video_index,
             video_status: VideoStatus.BRANCHVIDEOCOMPLETE
         })
     }
-    // if(videoProgress.value > 0 && !isBranchVideo.value) {
-    //     if(videoControler.value.video_status === VideoStatus.STOP) return 
-    //     console.log('修改成STOP的初始狀態') //STOP 應該要改成INIT
-
-    // }
 }
 function detechShowVoteInfo() {
-    if (videoControler.value.current_video_index === 4) return
     if (videoControler.value.video_status === VideoStatus.VOTING) { //投票的時候
         if (showInfoInterval.value) return //已經有interval就不要再設置了
         showVoteInfo.value = true;
@@ -113,7 +124,8 @@ function detechShowVoteInfo() {
             getVideoByIndex(videoControler.value.current_video_index).then(res => currentVideo.value = res)
         }, 1000)
         console.log('為了獲取投票資料，設置Intaval')
-    } else {
+    }
+    else {
         //非投票的時候
         showVoteInfo.value = false
         if (!showInfoInterval.value) return
@@ -138,6 +150,7 @@ function onVideoVoteComplete() {
     playVideo()
 }
 async function onBranchVideoComplete() {
+    if (videoControler.value.current_video_index === last_video_Index.value) return //最後一關的時候不要再往下撥了
     videoControler.value.current_video_index = Number(videoControler.value.current_video_index) + 1 //播下一部
     videoControler.value.video_status = VideoStatus.STOP
     postVIdeoControl({

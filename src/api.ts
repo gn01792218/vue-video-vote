@@ -24,3 +24,7 @@ export async function reset(){
   const res = await req("get",`ClearAll.php`)
   return res?.data as Video
 }
+export async function postUserLogin(){
+  const res = await req("get",`Hello.php`)
+  return res?.data as Video
+}
