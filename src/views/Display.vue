@@ -61,7 +61,6 @@ async function init() {
     videoControler.value = videoControl
     currentVideo.value = video
     playVideo()
-    
 }
 function setVotingProgress() { //設置個關卡要顯示投票的%數
     switch (videoControler.value.current_video_index) {
@@ -80,7 +79,7 @@ function setVotingProgress() { //設置個關卡要顯示投票的%數
     }
 }
 function setStatus() { //修改狀態以及通知server
-    if (videoProgress.value > 43 && videoControler.value.current_video_index === last_video_Index.value) {  //最後一支影片要設置的關閉投票顯示
+    if (videoProgress.value > 42 && videoControler.value.current_video_index === last_video_Index.value) {  //最後一支影片要設置的關閉投票顯示
         if (videoControler.value.video_status === VideoStatus.BRANCHVIDEOCOMPLETE) return
         showVoteInfo.value = false
         videoControler.value.video_status = VideoStatus.BRANCHVIDEOCOMPLETE
@@ -138,9 +137,15 @@ function detechShowVoteInfo() {
 }
 function playVideo() {
     if (!videoElement.value) return
-    
+    if(!videoElement.value.paused) return 
+    stopVIdeo() 
     videoElement.value.play()
     videoElement.value.muted = false
+}
+function stopVIdeo(){
+    if(!videoElement.value) return 
+    videoElement.value?.pause()
+    videoElement.value.currentTime = 0;
 }
 function onVideoVoteComplete() {
     if (!currentVideo.value) return alert('找不到當前的影片資料!')
