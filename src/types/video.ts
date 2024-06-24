@@ -35,3 +35,9 @@ export declare interface VideoControlRequest {
   current_video_index: number; //主控當前撥放的video_index (從0開始即可)
   video_status: VideoStatus;
 }
+
+export declare interface VideoInfor {
+  online_amt: number; //在線人數
+  Q5_A_amt: number; //投A人數
+  Q5_B_amt: number; //投B人數
+}

@@ -1,5 +1,5 @@
 import req from './http'
-import { Video, VideoControlRequest, VideoControler, VideoVoteRequest } from './types/video'
+import { Video, VideoControlRequest, VideoControler, VideoInfor, VideoVoteRequest } from './types/video'
 
 export async function getCurrentVideo(){
   const res = await req("get",`Video.php`)
@@ -27,4 +27,8 @@ export async function reset(){
 export async function postUserLogin(){
   const res = await req("get",`Hello.php`)
   return res?.data as Video
+}
+export async function getInfo(){
+  const res = await req("get",`GetInformation.php`)
+  return res?.data as VideoInfor
 }

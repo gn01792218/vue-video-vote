@@ -12,3 +12,14 @@
     /*竖向滚动条的宽度*/
     height: 0px;/*横向滚动条的高度*/
 }
+
+/* 控制頁面的訊息動畫 */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}

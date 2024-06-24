@@ -31,7 +31,7 @@ const videoControler = ref<VideoControler>({
     current_video_index: 0,
     video_status: VideoStatus.STOP
 })
-const votingProgress = ref(88) //幾%的時候要呈現投票
+const votingProgress = ref(89) //幾%的時候要呈現投票
 const isBranchVideo = computed(() => {
     return currentVideo.value?.url.includes('A.mp4') || currentVideo.value?.url.includes('B.mp4')
 })
@@ -65,13 +65,13 @@ async function init() {
 function setVotingProgress() { //設置個關卡要顯示投票的%數
     switch (videoControler.value.current_video_index) {
         case 1:
-            votingProgress.value = 84
+            votingProgress.value = 85
             break
         case 2:
             votingProgress.value = 79
             break
         case 3:
-            votingProgress.value = 96
+            votingProgress.value = 97
             break
         case 4:
             votingProgress.value = 32
